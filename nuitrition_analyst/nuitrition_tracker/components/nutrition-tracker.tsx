@@ -2,12 +2,12 @@
 
 import type React from "react"
 
-import { useState, useRef, useCallback } from "react"
+import { useState, useRef, useCallback, useEffect } from "react"
 import { Camera, Upload, Sparkles, X, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
-type InputMode = "select" | "camera" | "preview"
+type InputMode = "select" | "camera" | "preview" | "loading"
 
 interface AnalysisResult {
   food: string
@@ -23,28 +23,153 @@ export default function NutritionTracker() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null)
+  const [cameraError, setCameraError] = useState<string | null>(null)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
+  // Debug: Log component mount and check environment
+  useEffect(() => {
+    console.log("[v0] NutritionTracker component mounted")
+    console.log("[v0] Browser environment check:", typeof window !== "undefined")
+    console.log("[v0] MediaDevices available:", !!navigator?.mediaDevices?.getUserMedia)
+
+    return () => {
+      console.log("[v0] NutritionTracker component unmounting")
+      // Cleanup camera on unmount
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop())
+      }
+    }
+  }, [])
+
   // Start camera
   const startCamera = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" },
-        audio: false,
-      })
+    setCameraError(null)
+    setMode("loading")
 
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream
-        streamRef.current = stream
+    // Wait for React to render the video element
+    await new Promise(resolve => setTimeout(resolve, 200))
+
+    try {
+      console.log("[v0] Starting camera...")
+      console.log("[v0] videoRef.current exists:", !!videoRef.current)
+      console.log("[v0] videoRef object:", videoRef)
+      let stream: MediaStream | null = null
+
+      // Try to get the back camera first
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "environment",
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          },
+          audio: false,
+        })
+        console.log("[v0] Back camera accessed successfully")
+      } catch (envError) {
+        console.log("[v0] Environment camera not available, trying default camera")
+        // If back camera fails, try any available camera
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          },
+          audio: false,
+        })
+        console.log("[v0] Default camera accessed successfully")
       }
-      setMode("camera")
+
+      console.log("[v0] Checking video ref and stream:", !!videoRef.current, !!stream)
+
+      if (videoRef.current && stream) {
+        console.log("[v0] Video ref and stream check passed!")
+
+        // Store stream reference first
+        streamRef.current = stream
+        console.log("[v0] Stream stored in ref")
+
+        console.log("[v0] Stream tracks:", stream.getTracks().map(t => ({
+          kind: t.kind,
+          enabled: t.enabled,
+          readyState: t.readyState,
+          label: t.label
+        })))
+
+        // Set up video element
+        console.log("[v0] Setting video srcObject...")
+        videoRef.current.srcObject = stream
+        console.log("[v0] Video srcObject set successfully")
+
+        // Wait for video metadata to load
+        console.log("[v0] Waiting for video metadata...")
+        await new Promise<void>((resolve, reject) => {
+          if (!videoRef.current) {
+            reject(new Error("Video ref lost"))
+            return
+          }
+
+          const video = videoRef.current
+
+          // Check if metadata is already loaded
+          if (video.readyState >= 1) {
+            console.log("[v0] Video metadata already loaded, dimensions:", video.videoWidth, "x", video.videoHeight)
+            console.log("[v0] Video readyState:", video.readyState)
+            resolve()
+            return
+          }
+
+          const onLoadedMetadata = () => {
+            console.log("[v0] Video metadata loaded, dimensions:", video.videoWidth, "x", video.videoHeight)
+            console.log("[v0] Video readyState:", video.readyState)
+            resolve()
+          }
+
+          const onError = (e: Event) => {
+            console.error("[v0] Video error:", e)
+            reject(new Error("Video loading failed"))
+          }
+
+          video.addEventListener("loadedmetadata", onLoadedMetadata, { once: true })
+          video.addEventListener("error", onError, { once: true })
+
+          // Cleanup timeout in case it takes too long
+          setTimeout(() => {
+            video.removeEventListener("loadedmetadata", onLoadedMetadata)
+            video.removeEventListener("error", onError)
+            if (video.readyState >= 1) {
+              console.log("[v0] Video ready via timeout (readyState:", video.readyState, ")")
+              resolve()
+            } else {
+              console.error("[v0] Video timeout - readyState:", video.readyState)
+              reject(new Error("Video loading timeout - camera stream may not be active"))
+            }
+          }, 10000) // Increased to 10 seconds
+        })
+
+        // Ensure video plays
+        await videoRef.current.play().catch(e => console.error("Video autoplay error:", e))
+
+        // Only switch to camera mode after everything is ready
+        console.log("[v0] Camera ready, switching to camera mode")
+        setMode("camera")
+      }
     } catch (error) {
       console.error("[v0] Error accessing camera:", error)
-      alert("Unable to access camera. Please check permissions.")
+      const errorMessage = error instanceof Error ? error.message : "Unknown error"
+      setCameraError(errorMessage)
+
+      // Clean up stream if it was created
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop())
+        streamRef.current = null
+      }
+
+      setMode("select")
+      alert(`Unable to access camera: ${errorMessage}\n\nPlease check:\n- Camera permissions are granted\n- Camera is not being used by another application\n- Your browser supports camera access`)
     }
   }, [])
 
@@ -113,6 +238,11 @@ export default function NutritionTracker() {
       img.src = e.target?.result as string
     }
     reader.readAsDataURL(file)
+
+    // Reset file input to allow selecting the same file again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
   }, [])
 
   // Analyze food (mock API call)
@@ -147,6 +277,12 @@ export default function NutritionTracker() {
     setCapturedImage(null)
     setAnalysisResult(null)
     setIsAnalyzing(false)
+    setCameraError(null)
+
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
   }, [stopCamera])
 
   return (
@@ -169,14 +305,32 @@ export default function NutritionTracker() {
       {/* Main Content */}
       <div className="px-4 pb-12">
         <div className="max-w-2xl mx-auto">
-          <Card className="overflow-hidden shadow-xl">
+          <Card className="overflow-hidden shadow-xl relative">
+            {/* Video and canvas always rendered so refs are always available */}
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className={mode === "camera" ? "w-full aspect-[4/3] object-cover bg-gray-900" : "hidden"}
+              style={mode === "camera" ? { minHeight: '400px' } : undefined}
+            />
+            <canvas ref={canvasRef} className="hidden" />
+
             {/* Select Mode */}
             {mode === "select" && (
               <div className="p-8 md:p-12 space-y-6">
                 <h2 className="text-2xl font-semibold text-center mb-8">{"Choose how to capture your food"}</h2>
 
                 <div className="grid gap-4 md:gap-6">
-                  <Button size="lg" className="h-auto py-6 text-lg rounded-2xl" onClick={startCamera}>
+                  <Button
+                    size="lg"
+                    className="h-auto py-6 text-lg rounded-2xl"
+                    onClick={() => {
+                      console.log("[v0] Take a Photo button clicked!")
+                      startCamera()
+                    }}
+                  >
                     <Camera className="w-6 h-6 mr-3" />
                     {"Take a Photo"}
                   </Button>
@@ -208,24 +362,33 @@ export default function NutritionTracker() {
               </div>
             )}
 
-            {/* Camera Mode */}
+            {/* Loading Camera */}
+            {mode === "loading" && (
+              <div className="p-12 md:p-16 space-y-6 text-center">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
+                  <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                </div>
+                <h2 className="text-2xl font-semibold">{"Initializing Camera..."}</h2>
+                <p className="text-muted-foreground">{"Please grant camera access if prompted"}</p>
+                <Button variant="outline" onClick={reset} className="mt-4">
+                  {"Cancel"}
+                </Button>
+              </div>
+            )}
+
+            {/* Camera Mode - Controls Overlay */}
             {mode === "camera" && (
-              <div className="relative bg-black">
-                <video ref={videoRef} autoPlay playsInline className="w-full aspect-[4/3] object-cover" />
-                <canvas ref={canvasRef} className="hidden" />
+              <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent z-10">
+                <div className="flex items-center justify-center gap-4">
+                  <Button size="lg" variant="outline" className="rounded-full bg-transparent" onClick={reset}>
+                    <X className="w-5 h-5 mr-2" />
+                    {"Cancel"}
+                  </Button>
 
-                <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
-                  <div className="flex items-center justify-center gap-4">
-                    <Button size="lg" variant="outline" className="rounded-full bg-transparent" onClick={reset}>
-                      <X className="w-5 h-5 mr-2" />
-                      {"Cancel"}
-                    </Button>
-
-                    <Button size="lg" className="rounded-full px-8" onClick={capturePhoto}>
-                      <Camera className="w-5 h-5 mr-2" />
-                      {"Capture"}
-                    </Button>
-                  </div>
+                  <Button size="lg" className="rounded-full px-8" onClick={capturePhoto}>
+                    <Camera className="w-5 h-5 mr-2" />
+                    {"Capture"}
+                  </Button>
                 </div>
               </div>
             )}
