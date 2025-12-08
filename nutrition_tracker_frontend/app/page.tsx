@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { useRouter } from "next/navigation"
 import NutritionTracker from "@/components/nutrition-tracker"
 import { Loader2, LogOut, BarChart3 } from "lucide-react"
@@ -10,16 +10,17 @@ export default function Home() {
   const router = useRouter()
 
 
-  let userName = "Guest"
-  const storedUser = localStorage.getItem("user");
-  if (storedUser) {
-  try {
-    const user = JSON.parse(storedUser) as { name?: string }
-    userName = user.name || "Guest";
-  } catch (e) {
-    console.error("Failed to parse user from localStorage", e)
-  }
-  }
+  const [userName, setUserName] = useState("Guest");
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser) as { name?: string };
+        if (user.name) setUserName(user.name);
+      } catch {}
+    }
+  }, []);
 
 
   const handleLogout = () => {

@@ -2,24 +2,24 @@
   "user_id": "user001",
   "days": [
     {
-      "date": "2025-12-08",
+      "date": "2025-12-09",
       "daily_summary": {
-        "total_calories": 2700.0,
-        "total_protein": 150.0,
-        "total_fat": 105.5,
-        "total_carbs": 308.0,
-        "total_sodium": 7100.0,
+        "total_calories": 3521.0,
+        "total_protein": 164.5,
+        "total_fat": 160.8,
+        "total_carbs": 379.6,
+        "total_sodium": 9210.0,
         "daily_score": 0
       },
       "meals": [
         {
           "dishes": [
             {
-              "name": "鸡肉炒饭",
+              "name": "Chicken Fried Rice",
               "category": "Staple",
               "estimated_weight_g": 500,
               "portion_level": "large",
-              "reason": "碗中盛满炒饭，体积较大，根据常见餐量估算约为500克。",
+              "reason": "The bowl is filled to the brim with fried rice, indicating a generous serving. The visible ingredients (rice, chicken, carrots, peas) suggest a substantial portion typical of a main course.",
               "dish_id": "dish_1",
               "final_weight_g": 500,
               "is_reasonable": true,
@@ -27,93 +27,15 @@
               "nutrition_per_100g": {
                 "calories": 130.0,
                 "protein": 7.5,
-                "fat": 4.2,
-                "carbs": 16.8,
-                "sodium": 320.0
-              },
-              "nutrition_total": {
-                "calories": 650.0,
-                "protein": 37.5,
-                "fat": 21.0,
-                "carbs": 84.0,
-                "sodium": 1600.0
-              }
-            }
-          ],
-          "meal_nutrition_total": {
-            "calories": 650.0,
-            "protein": 37.5,
-            "fat": 21.0,
-            "carbs": 84.0,
-            "sodium": 1600.0
-          },
-          "image_path": "/home/salami/Pictures/fried_rice.jpg",
-          "meal_id": "meal_2025-12-08_1",
-          "timestamp": "2025-12-08T22:07:06.102487"
-        },
-        {
-          "dishes": [
-            {
-              "name": "鸡肉炒饭",
-              "category": "Staple",
-              "estimated_weight_g": 500,
-              "portion_level": "large",
-              "reason": "碗中盛满炒饭，体积较大，根据常见餐量估算约为500克。",
-              "dish_id": "dish_1",
-              "final_weight_g": 500,
-              "is_reasonable": true,
-              "verification_reason": "",
-              "nutrition_per_100g": {
-                "calories": 130.0,
-                "protein": 7.5,
-                "fat": 4.2,
-                "carbs": 16.8,
-                "sodium": 320.0
-              },
-              "nutrition_total": {
-                "calories": 650.0,
-                "protein": 37.5,
-                "fat": 21.0,
-                "carbs": 84.0,
-                "sodium": 1600.0
-              }
-            }
-          ],
-          "meal_nutrition_total": {
-            "calories": 650.0,
-            "protein": 37.5,
-            "fat": 21.0,
-            "carbs": 84.0,
-            "sodium": 1600.0
-          },
-          "image_path": "/home/salami/Pictures/fried_rice.jpg",
-          "meal_id": "meal_2025-12-08_2",
-          "timestamp": "2025-12-08T22:55:46.924349"
-        },
-        {
-          "dishes": [
-            {
-              "name": "鸡肉炒饭",
-              "category": "Staple",
-              "estimated_weight_g": 500,
-              "portion_level": "large",
-              "reason": "碗中盛满炒饭，体积较大，根据常见餐量估算约为500克。",
-              "dish_id": "dish_1",
-              "final_weight_g": 500,
-              "is_reasonable": true,
-              "verification_reason": "",
-              "nutrition_per_100g": {
-                "calories": 130.0,
-                "protein": 7.5,
-                "fat": 6.2,
-                "carbs": 12.8,
+                "fat": 6.5,
+                "carbs": 12.0,
                 "sodium": 380.0
               },
               "nutrition_total": {
                 "calories": 650.0,
                 "protein": 37.5,
-                "fat": 31.0,
-                "carbs": 64.0,
+                "fat": 32.5,
+                "carbs": 60.0,
                 "sodium": 1900.0
               }
             }
@@ -121,13 +43,13 @@
           "meal_nutrition_total": {
             "calories": 650.0,
             "protein": 37.5,
-            "fat": 31.0,
-            "carbs": 64.0,
+            "fat": 32.5,
+            "carbs": 60.0,
             "sodium": 1900.0
           },
-          "image_path": "/home/salami/Pictures/fried_rice.jpg",
-          "meal_id": "meal_2025-12-08_3",
-          "timestamp": "2025-12-08T23:13:40.357998"
+          "image_path": "/tmp/tmpfs1lt_34.png",
+          "meal_id": "meal_2025-12-09_1",
+          "timestamp": "2025-12-09T07:51:56.478031"
         },
         {
           "dishes": [
@@ -142,31 +64,336 @@
               "is_reasonable": true,
               "verification_reason": "",
               "nutrition_per_100g": {
-                "calories": 150.0,
+                "calories": 130.0,
                 "protein": 7.5,
                 "fat": 6.5,
-                "carbs": 15.2,
-                "sodium": 400.0
+                "carbs": 12.0,
+                "sodium": 380.0
               },
               "nutrition_total": {
-                "calories": 750.0,
+                "calories": 650.0,
                 "protein": 37.5,
                 "fat": 32.5,
-                "carbs": 76.0,
-                "sodium": 2000.0
+                "carbs": 60.0,
+                "sodium": 1900.0
               }
             }
           ],
           "meal_nutrition_total": {
-            "calories": 750.0,
+            "calories": 650.0,
             "protein": 37.5,
             "fat": 32.5,
-            "carbs": 76.0,
-            "sodium": 2000.0
+            "carbs": 60.0,
+            "sodium": 1900.0
           },
-          "image_path": "/home/salami/Pictures/fried_rice.jpg",
-          "meal_id": "meal_2025-12-08_4",
-          "timestamp": "2025-12-08T23:15:23.493765"
+          "image_path": "/tmp/tmp5dlywcnl.png",
+          "meal_id": "meal_2025-12-09_2",
+          "timestamp": "2025-12-09T07:55:29.671569"
+        },
+        {
+          "dishes": [
+            {
+              "name": "Chicken Fried Rice",
+              "category": "Staple",
+              "estimated_weight_g": 600,
+              "portion_level": "large",
+              "reason": "The bowl is filled to the brim with fried rice, indicating a generous serving. The visible ingredients (rice, chicken, carrots, peas) suggest a substantial portion typical of a main course.",
+              "dish_id": "dish_1",
+              "final_weight_g": 400,
+              "is_reasonable": false,
+              "verification_reason": "A typical serving of chicken fried rice ranges from 300g to 450g. An estimate of 600g is on the high side and likely exceeds a standard single portion, especially when considering meal balance.",
+              "nutrition_per_100g": {
+                "calories": 130.0,
+                "protein": 7.5,
+                "fat": 6.5,
+                "carbs": 12.0,
+                "sodium": 380.0
+              },
+              "nutrition_total": {
+                "calories": 520.0,
+                "protein": 30.0,
+                "fat": 26.0,
+                "carbs": 48.0,
+                "sodium": 1520.0
+              }
+            }
+          ],
+          "meal_nutrition_total": {
+            "calories": 520.0,
+            "protein": 30.0,
+            "fat": 26.0,
+            "carbs": 48.0,
+            "sodium": 1520.0
+          },
+          "image_path": "/tmp/tmpgh8lpt_9.png",
+          "meal_id": "meal_2025-12-09_3",
+          "timestamp": "2025-12-09T07:57:29.990774"
+        },
+        {
+          "dishes": [
+            {
+              "name": "Chicken Fried Rice",
+              "category": "Staple",
+              "estimated_weight_g": 500,
+              "portion_level": "large",
+              "reason": "The bowl is filled to the brim with fried rice, indicating a generous serving. The visible ingredients (rice, chicken, carrots, peas) suggest a substantial portion typical of a main course.",
+              "final_weight_g": 500,
+              "is_reasonable": true,
+              "verification_reason": "",
+              "nutrition_per_100g": {
+                "calories": 130.0,
+                "protein": 6.5,
+                "fat": 4.5,
+                "carbs": 16.5,
+                "sodium": 300.0
+              },
+              "nutrition_total": {
+                "calories": 650.0,
+                "protein": 32.5,
+                "fat": 22.5,
+                "carbs": 82.5,
+                "sodium": 1500.0
+              }
+            }
+          ],
+          "meal_nutrition_total": {
+            "calories": 650.0,
+            "protein": 32.5,
+            "fat": 22.5,
+            "carbs": 82.5,
+            "sodium": 1500.0
+          },
+          "image_path": "/tmp/tmp5nojz618.png",
+          "meal_id": "meal_2025-12-09_4",
+          "timestamp": "2025-12-09T07:59:34.103825"
+        },
+        {
+          "dishes": [
+            {
+              "name": "Masala Dosa",
+              "category": "Staple",
+              "estimated_weight_g": 200,
+              "portion_level": "large",
+              "reason": "The dosa is a large, rolled crepe that appears to be the main component of the meal, occupying a significant portion of the plate.",
+              "dish_id": "dish_1",
+              "final_weight_g": 200,
+              "is_reasonable": true,
+              "verification_reason": "",
+              "nutrition_per_100g": {
+                "calories": 150.0,
+                "protein": 4.5,
+                "fat": 6.0,
+                "carbs": 18.0,
+                "sodium": 300.0
+              },
+              "nutrition_total": {
+                "calories": 300.0,
+                "protein": 9.0,
+                "fat": 12.0,
+                "carbs": 36.0,
+                "sodium": 600.0
+              }
+            },
+            {
+              "name": "Potato Masala",
+              "category": "Vegetable",
+              "estimated_weight_g": 100,
+              "portion_level": "medium",
+              "reason": "The potato masala is served in a small metal bowl and appears to be a side dish, with a volume roughly equivalent to a medium-sized portion.",
+              "dish_id": "dish_2",
+              "final_weight_g": 100,
+              "is_reasonable": true,
+              "verification_reason": "",
+              "nutrition_per_100g": {
+                "calories": 95.0,
+                "protein": 2.5,
+                "fat": 4.5,
+                "carbs": 12.0,
+                "sodium": 300.0
+              },
+              "nutrition_total": {
+                "calories": 95.0,
+                "protein": 2.5,
+                "fat": 4.5,
+                "carbs": 12.0,
+                "sodium": 300.0
+              }
+            },
+            {
+              "name": "Coconut Chutney",
+              "category": "Snack",
+              "estimated_weight_g": 50,
+              "portion_level": "small",
+              "reason": "The chutney is in a small white bowl and appears to be a condiment, with a quantity typical for a small serving.",
+              "dish_id": "dish_3",
+              "final_weight_g": 50,
+              "is_reasonable": true,
+              "verification_reason": "",
+              "nutrition_per_100g": {
+                "calories": 120.0,
+                "protein": 2.5,
+                "fat": 9.0,
+                "carbs": 8.0,
+                "sodium": 200.0
+              },
+              "nutrition_total": {
+                "calories": 60.0,
+                "protein": 1.25,
+                "fat": 4.5,
+                "carbs": 4.0,
+                "sodium": 100.0
+              }
+            },
+            {
+              "name": "Red Chutney",
+              "category": "Snack",
+              "estimated_weight_g": 30,
+              "portion_level": "small",
+              "reason": "The red chutney is also in a small white bowl, similar in size to the coconut chutney, indicating a small portion.",
+              "dish_id": "dish_4",
+              "final_weight_g": 30,
+              "is_reasonable": true,
+              "verification_reason": "",
+              "nutrition_per_100g": {
+                "calories": 120.0,
+                "protein": 2.5,
+                "fat": 8.0,
+                "carbs": 9.0,
+                "sodium": 450.0
+              },
+              "nutrition_total": {
+                "calories": 36.0,
+                "protein": 0.75,
+                "fat": 2.4,
+                "carbs": 2.7,
+                "sodium": 135.0
+              }
+            }
+          ],
+          "meal_nutrition_total": {
+            "calories": 491.0,
+            "protein": 13.5,
+            "fat": 23.4,
+            "carbs": 54.7,
+            "sodium": 1135.0
+          },
+          "image_path": "/tmp/tmpalbxj_k3.png",
+          "meal_id": "meal_2025-12-09_5",
+          "timestamp": "2025-12-09T08:02:22.044578"
+        },
+        {
+          "dishes": [
+            {
+              "name": "Masala Dosa",
+              "category": "Staple",
+              "estimated_weight_g": 200,
+              "portion_level": "large",
+              "reason": "The dosa is a large, rolled crepe that occupies the majority of the plate, indicating a substantial portion.",
+              "dish_id": "dish_1",
+              "final_weight_g": 200,
+              "is_reasonable": true,
+              "verification_reason": "A Masala Dosa typically weighs between 150g to 250g, depending on size. An estimated weight of 200g falls within the normal range for a standard single serving.",
+              "nutrition_per_100g": {
+                "calories": 180.0,
+                "protein": 4.5,
+                "fat": 6.0,
+                "carbs": 27.0,
+                "sodium": 350.0
+              },
+              "nutrition_total": {
+                "calories": 360.0,
+                "protein": 9.0,
+                "fat": 12.0,
+                "carbs": 54.0,
+                "sodium": 700.0
+              }
+            },
+            {
+              "name": "Potato Masala",
+              "category": "Vegetable",
+              "estimated_weight_g": 100,
+              "portion_level": "medium",
+              "reason": "The potato masala is served in a small metal bowl and appears to be a side dish accompanying the main dosa.",
+              "dish_id": "dish_2",
+              "final_weight_g": 100,
+              "is_reasonable": true,
+              "verification_reason": "Potato Masala (also known as Aloo Masala), served as a filling in dosa or as a side, usually has a serving size around 80g to 120g. At 100g, this estimate is reasonable.",
+              "nutrition_per_100g": {
+                "calories": 95.0,
+                "protein": 2.5,
+                "fat": 4.5,
+                "carbs": 12.0,
+                "sodium": 300.0
+              },
+              "nutrition_total": {
+                "calories": 95.0,
+                "protein": 2.5,
+                "fat": 4.5,
+                "carbs": 12.0,
+                "sodium": 300.0
+              }
+            },
+            {
+              "name": "Coconut Chutney",
+              "category": "Snack",
+              "estimated_weight_g": 50,
+              "portion_level": "small",
+              "reason": "The chutney is in a small round metal bowl and is typically served as a condiment in smaller quantities.",
+              "dish_id": "dish_3",
+              "final_weight_g": 50,
+              "is_reasonable": true,
+              "verification_reason": "Coconut chutney is typically served in small quantities as a condiment. A serving size of 40g to 60g is common. 50g is well within the expected range.",
+              "nutrition_per_100g": {
+                "calories": 120.0,
+                "protein": 2.5,
+                "fat": 10.0,
+                "carbs": 6.0,
+                "sodium": 150.0
+              },
+              "nutrition_total": {
+                "calories": 60.0,
+                "protein": 1.25,
+                "fat": 5.0,
+                "carbs": 3.0,
+                "sodium": 75.0
+              }
+            },
+            {
+              "name": "Red Chutney",
+              "category": "Snack",
+              "estimated_weight_g": 30,
+              "portion_level": "small",
+              "reason": "The red chutney is in a small white square bowl and is a common accompaniment served in smaller portions.",
+              "dish_id": "dish_4",
+              "final_weight_g": 30,
+              "is_reasonable": true,
+              "verification_reason": "Red chutney (such as tomato or chili-based chutney) is also served as a condiment in small portions. 30g is slightly on the lower side but still reasonable for a single serving.",
+              "nutrition_per_100g": {
+                "calories": 150.0,
+                "protein": 2.5,
+                "fat": 8.0,
+                "carbs": 18.0,
+                "sodium": 600.0
+              },
+              "nutrition_total": {
+                "calories": 45.0,
+                "protein": 0.75,
+                "fat": 2.4,
+                "carbs": 5.4,
+                "sodium": 180.0
+              }
+            }
+          ],
+          "meal_nutrition_total": {
+            "calories": 560.0,
+            "protein": 13.5,
+            "fat": 23.9,
+            "carbs": 74.4,
+            "sodium": 1255.0
+          },
+          "image_path": "/tmp/tmpk2_3aa4n.png",
+          "meal_id": "meal_2025-12-09_6",
+          "timestamp": "2025-12-09T08:06:37.981535"
         }
       ]
     }

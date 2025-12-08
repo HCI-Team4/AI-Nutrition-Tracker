@@ -39,10 +39,10 @@ def print_error(message):
     print(f"❌ {message}")
 
 
-def analyze_meal_from_image():
+def analyze_meal_from_image(image_path: str, meal_type: str = "") -> dict:
     """Fully automated meal image analysis"""
     print_header()
-    
+
     # Initialize Agent
     print_progress("Initializing Agent...")
     try:
@@ -51,21 +51,21 @@ def analyze_meal_from_image():
         print()
     except Exception as e:
         print_error(f"Initialization failed: {str(e)}")
-        return
+        return {}
     
     # Input image path
     print("📸 Please enter meal image path:")
     print("   Tip: You can drag image to terminal or paste full path")
     print()
-    image_path = input("Image path: ").strip().strip("'\"")  # Remove quotes
+    #image_path = input("Image path: ").strip().strip("'\"")  # Remove quotes
     
     if not image_path:
         print_error("No image path provided")
-        return
+        return {}
     
     if not os.path.exists(image_path):
         print_error(f"Image does not exist: {image_path}")
-        return
+        return {}
     
     print()
     
@@ -158,6 +158,7 @@ def analyze_meal_from_image():
         print()
         print_success("✅ Data automatically saved to database: db/meals.json")
         print()
+        return result
         
     except Exception as e:
         print()

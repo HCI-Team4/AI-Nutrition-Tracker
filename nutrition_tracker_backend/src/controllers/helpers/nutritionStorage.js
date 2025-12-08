@@ -28,7 +28,6 @@ export function readNutritionData() {
 // Save JSON
 export function writeNutritionData(data) {
   ensureNutritionFile();
-    console.log(data);
     console.log("Writing to:", path.resolve(nutritionFile));
   fs.writeFileSync(nutritionFile, JSON.stringify(data, null, 2));
 }
@@ -41,18 +40,12 @@ export function addNutritionEntry(userName, entry) {
 
   const date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
   const time = new Date().toTimeString().slice(0, 5);  // HH:MM
-    console.log("data - ",entry);
   if (!data[userName]) data[userName] = {};
   if (!data[userName][date]) data[userName][date] = {};
   if (!data[userName][date][time]) data[userName][date][time] = [];
   data[userName][date][time].push(entry);
-    console.log(data);
 
   writeNutritionData(data);
-
-    console.log("wrote",data);
-    const datarewrite = readNutritionData();
-    console.log(datarewrite);
 
 }
 

@@ -266,10 +266,19 @@ export default function NutritionTracker() {
         const data = await response.json();
         if (!response.ok) { throw new Error(data.error || "Failed to analyze");
         }
+        const { mainDish } = data;
         // Assume backend returns something like:
         // { success: true, result: { food, calories, ... } }
-        setAnalysisResult(data.result);
-        console.log("[API] Backend result:", data.result);
+        const roundedDish = {
+            food: mainDish.food,
+            calories: parseFloat(mainDish.calories.toFixed(2)),
+            carbs: parseFloat(mainDish.carbs.toFixed(2)),
+            protein: parseFloat(mainDish.protein.toFixed(2)),
+            fat: parseFloat(mainDish.fat.toFixed(2)),
+        };
+
+        setAnalysisResult(roundedDish);
+        console.log("[API] Backend result:", roundedDish);
         } catch (err) {
             console.error("Analyze API error:", err);
         } finally {
