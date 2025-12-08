@@ -50,31 +50,31 @@ def compute_meal_nutrition(portion_result: str) -> str:
     }
     
     for dish in dishes:
-        # 🔍 严格检查：必须有 final_weight_g
+        # 🔍 Strict check: must have final_weight_g
         if "final_weight_g" not in dish:
-            error_msg = f"❌ compute: 菜品 {dish.get('name', 'unknown')} 缺少 final_weight_g 字段"
+            error_msg = f"❌ compute: Dish {dish.get('name', 'unknown')} is missing final_weight_g field"
             print(error_msg)
-            print(f"   菜品完整数据: {dish}")
+            print(f"   Full dish data: {dish}")
             raise ValueError(error_msg)
         
-        # 🔍 严格检查：必须有 nutrition_per_100g
+        # 🔍 Strict check: must have nutrition_per_100g
         if "nutrition_per_100g" not in dish:
-            error_msg = f"❌ compute: 菜品 {dish.get('name', 'unknown')} 缺少 nutrition_per_100g 字段"
+            error_msg = f"❌ compute: Dish {dish.get('name', 'unknown')} is missing nutrition_per_100g field"
             print(error_msg)
-            print(f"   菜品完整数据: {dish}")
+            print(f"   Full dish data: {dish}")
             raise ValueError(error_msg)
         
-        # 获取最终重量
+        # Get final weight
         weight_g = dish.get("final_weight_g", dish.get("estimated_weight_g", 100))
         
-        # 获取每100g营养
+        # Get nutrition per 100g
         nutrition_per_100g = dish.get("nutrition_per_100g", {})
         
-        print(f"[DEBUG compute] 菜品: {dish.get('name')}")
-        print(f"[DEBUG compute]   重量: {weight_g}g")
-        print(f"[DEBUG compute]   每100g营养: {nutrition_per_100g}")
+        print(f"[DEBUG compute] Dish: {dish.get('name')}")
+        print(f"[DEBUG compute]   Weight: {weight_g}g")
+        print(f"[DEBUG compute]   Nutrition per 100g: {nutrition_per_100g}")
         
-        # 计算该菜品的总营养
+        # Compute total nutrition for the dish
         nutrition_total = {
             "calories": nutrition_per_100g.get("calories", 0) * weight_g / 100,
             "protein": nutrition_per_100g.get("protein", 0) * weight_g / 100,
@@ -83,29 +83,29 @@ def compute_meal_nutrition(portion_result: str) -> str:
             "sodium": nutrition_per_100g.get("sodium", 0) * weight_g / 100
         }
         
-        print(f"[DEBUG compute]   计算后总营养: {nutrition_total}")
+        print(f"[DEBUG compute]   Total nutrition after calculation: {nutrition_total}")
         
-        # 更新菜品数据
+        # Update dish data
         dish_copy = dish.copy()
         dish_copy["nutrition_total"] = nutrition_total
         result_dishes.append(dish_copy)
         
-        # 累加到整餐总计
+        # Add to overall meal total
         for key in meal_total:
             meal_total[key] += nutrition_total[key]
     
-    # 四舍五入
+    # Round values
     for key in meal_total:
         meal_total[key] = round(meal_total[key], 2)
     
-    print(f"[DEBUG compute] ✅ 计算完成")
-    print(f"[DEBUG compute]   整餐总营养: {meal_total}")
+    print(f"[DEBUG compute] ✅ Calculation complete")
+    print(f"[DEBUG compute]   Total meal nutrition: {meal_total}")
     
-    # 🔍 严格检查：如果所有营养值都是0，抛出错误
+    # 🔍 Strict check: if everything is zero, error
     if all(v == 0 for v in meal_total.values()):
-        error_msg = "❌ CRITICAL: 计算结果全为0，数据异常！"
+        error_msg = "❌ CRITICAL: All computed values are 0, data abnormal!"
         print(error_msg)
-        print(f"   dishes数据: {dishes}")
+        print(f"   dishes data: {dishes}")
         raise ValueError(error_msg)
     
     result = {
@@ -120,15 +120,15 @@ def compute_meal_nutrition(portion_result: str) -> str:
 @tool  
 def score_current_meal(nutrition: Dict[str, float]) -> Dict[str, Any]:
     """
-    根据营养数据给本餐打分(使用简单规则)。
-    注意：在实际Agent中，这个功能会由LLM通过prompt完成。
-    这里提供一个简单的规则版本作为备用。
+    Score the meal based on nutrition (simple rule-based version).
+    Note: In the real Agent system, this will be handled by an LLM via prompt.
+    This provides a simple fallback rule version.
     
-    参数:
-        nutrition: 营养数据字典
+    Parameters:
+        nutrition: Nutrition dictionary
     
-    返回:
-        包含score和advice
+    Returns:
+        Contains score and advice
     """
     score = 100
     advice_parts = []
@@ -139,50 +139,50 @@ def score_current_meal(nutrition: Dict[str, float]) -> Dict[str, Any]:
     carbs = nutrition.get("carbs", 0)
     sodium = nutrition.get("sodium", 0)
     
-    # 评分规则
-    # 1. 热量评估 (建议500-800)
+    # Scoring rules
+    # 1. Calories (recommended 500-800)
     if calories < 400:
         score -= 10
-        advice_parts.append("热量偏低")
+        advice_parts.append("Low calories")
     elif calories > 900:
         score -= 15
-        advice_parts.append("热量偏高")
+        advice_parts.append("High calories")
     
-    # 2. 蛋白质评估 (建议>20g)
+    # 2. Protein (recommended >20g)
     if protein < 15:
         score -= 15
-        advice_parts.append("蛋白质不足")
+        advice_parts.append("Insufficient protein")
     elif protein > 50:
         score -= 5
-        advice_parts.append("蛋白质偏多")
+        advice_parts.append("Too much protein")
     else:
-        advice_parts.append("蛋白质充足")
+        advice_parts.append("Good protein level")
     
-    # 3. 脂肪评估 (建议<30g)
+    # 3. Fat (recommended <30g)
     if fat > 35:
         score -= 15
-        advice_parts.append("脂肪含量偏高")
+        advice_parts.append("Fat content too high")
     
-    # 4. 碳水评估 (建议40-100g)
+    # 4. Carbs (recommended 40-100g)
     if carbs < 30:
         score -= 10
-        advice_parts.append("碳水不足")
+        advice_parts.append("Carbs too low")
     elif carbs > 120:
         score -= 10
-        advice_parts.append("碳水偏多")
+        advice_parts.append("Carbs too high")
     
-    # 5. 钠评估 (建议<1000mg)
+    # 5. Sodium (recommended <1000mg)
     if sodium > 1200:
         score -= 15
-        advice_parts.append("钠含量偏高，建议减少盐分摄入")
+        advice_parts.append("Sodium too high, reduce salt intake")
     elif sodium > 800:
         score -= 5
-        advice_parts.append("钠含量略高")
+        advice_parts.append("Sodium slightly high")
     
-    # 确保分数在0-100之间
+    # Ensure 0–100 range
     score = max(0, min(100, score))
     
-    advice = "；".join(advice_parts) if advice_parts else "营养均衡"
+    advice = "；".join(advice_parts) if advice_parts else "Balanced nutrition"
     
     return {
         "score": score,
@@ -191,11 +191,11 @@ def score_current_meal(nutrition: Dict[str, float]) -> Dict[str, Any]:
 
 
 if __name__ == "__main__":
-    # 测试代码
+    # Test code
     test_dishes = [
         {
             "dish_id": "dish_1",
-            "name": "白米饭",
+            "name": "White rice",
             "final_weight_g": 180,
             "nutrition_per_100g": {
                 "calories": 116,
@@ -207,7 +207,7 @@ if __name__ == "__main__":
         },
         {
             "dish_id": "dish_2",
-            "name": "宫保鸡丁",
+            "name": "Kung Pao Chicken",
             "final_weight_g": 160,
             "nutrition_per_100g": {
                 "calories": 195,
@@ -223,7 +223,8 @@ if __name__ == "__main__":
     import json
     print(json.dumps(result, ensure_ascii=False, indent=2))
     
-    # 测试评分
+    # Test scoring
     score_result = score_current_meal.invoke({"nutrition": result["meal_nutrition_total"]})
-    print("\n评分结果:")
+    print("\nScore result:")
     print(json.dumps(score_result, ensure_ascii=False, indent=2))
+

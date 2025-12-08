@@ -29,7 +29,7 @@ DEFAULT_USER_ID = "user001"
 RECENT_DAYS = 7  # Query records for recent N days
 
 # Agent System Prompt
-AGENT_SYSTEM_PROMPT = """You are an intelligent nutrition analysis Agent.
+AGENT_SYSTEM_PROMPT = """You are an intelligent English speaking nutrition analysis Agent.
 
 Your tasks are:
 1. Analyze the meal image provided by the user

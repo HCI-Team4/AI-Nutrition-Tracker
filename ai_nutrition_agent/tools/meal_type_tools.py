@@ -29,14 +29,14 @@ def infer_meal_type(timestamp: Optional[str] = None, recent_meals: Optional[list
     
     Strategy:
     - Cold start (historical data < 3 days): Use fixed time rules
-    - With historical data: Call LLM to analyze user schedule habits, intelligently infer
+    - With historical data: Call LLM to analyze user schedule habits to intelligently infer
     
     Args:
         timestamp: ISO format timestamp (optional, defaults to current time)
         recent_meals: Recent meal records (optional)
     
     Returns:
-        Meal type: Breakfast/Lunch/Dinner/Late-night Snack/Snack, etc.
+        Meal type: Breakfast/Lunch/Dinner/Midnight Snack/Snack, etc.
     """
     # Parse time
     if timestamp:
@@ -49,34 +49,34 @@ def infer_meal_type(timestamp: Optional[str] = None, recent_meals: Optional[list
     today_str = dt.strftime("%Y-%m-%d")
     current_time_str = dt.strftime("%H:%M")
     
-    # 统计历史数据天数
+    # Count number of days with historical data
     if recent_meals and len(recent_meals) >= 3:
-        # 有足够历史数据，使用LLM智能分析
+        # Enough history → use LLM analysis
         return _infer_with_llm(current_time_str, today_str, recent_meals)
     else:
-        # 冷启动：使用固定规则
+        # Cold start → use fixed rules
         return _infer_with_rules(current_hour, today_str, recent_meals)
 
 
 def _infer_with_rules(hour: int, today: str, recent_meals: Optional[list]) -> str:
     """
-    冷启动：使用固定时间规则判断餐型
+    Cold start: Determine meal type using fixed time rules
     """
-    # 基础时间规则
+    # Basic time rules
     if 5 <= hour < 10:
-        base_type = "早餐"
+        base_type = "Breakfast"
     elif 10 <= hour < 14:
-        base_type = "午餐"
+        base_type = "Lunch"
     elif 14 <= hour < 17:
-        base_type = "下午茶"
+        base_type = "Afternoon Tea"
     elif 17 <= hour < 21:
-        base_type = "晚餐"
+        base_type = "Dinner"
     elif 21 <= hour < 24:
-        base_type = "夜宵"
-    else:  # 0-5点
-        base_type = "夜宵"
+        base_type = "Midnight Snack"
+    else:  # 0-5 AM
+        base_type = "Midnight Snack"
     
-    # 检查今天是否已经有相同餐型
+    # Check if user already had same meal type today
     if recent_meals:
         today_meal_types = []
         for day_record in recent_meals:
@@ -85,142 +85,154 @@ def _infer_with_rules(hour: int, today: str, recent_meals: Optional[list]) -> st
                 today_meal_types = [meal.get("meal_type") for meal in meals]
                 break
         
-        # 如果今天已经吃过该餐型，标记为加餐
+        # If already eaten → return snack-type variation
         if base_type in today_meal_types:
             if hour < 10:
-                return "早餐加餐"
+                return "Morning Snack"
             elif hour < 17:
-                return "午后加餐"
+                return "Afternoon Snack"
             else:
-                return "夜宵"
+                return "Midnight Snack"
     
     return base_type
 
 
 def _infer_with_llm(current_time: str, today: str, recent_meals: List[Dict]) -> str:
     """
-    使用LLM分析用户作息习惯，智能推断餐型
+    Use LLM to analyze user eating habits and intelligently infer meal type
     """
-    # 构建用户作息分析提示词
-    prompt = f"""你是一个智能餐型分析助手。请根据用户的历史用餐记录，分析其作息习惯，并判断当前时间应该是什么餐型。
+    # Prompt for analyzing meal habits
+    prompt = f"""
+You are an intelligent meal-type analysis assistant. Based on the user's historical meal records, analyze their daily eating habits and determine what meal type it should be at the current time.
 
-**当前信息：**
-- 当前时间：{today} {current_time}
-- 今天日期：{today}
+**Current Information:**
+- Current time: {today} {current_time}
+- Today's date: {today}
 
-**用户最近的用餐记录：**
+**User’s recent meal records:**
 {json.dumps(recent_meals, ensure_ascii=False, indent=2)}
 
-**分析要求：**
-1. 观察用户的用餐时间规律（例如：每天只吃2顿？通常几点吃早餐/午餐/晚餐？）
-2. 识别用户的个性化作息（有人早餐在11点，有人晚餐在20点）
-3. 判断今天是否已经吃过某些餐型
-4. 如果当前时间与用户历史规律匹配某个餐型，返回该餐型
-5. 如果是加餐时间（两餐之间），返回"加餐"或"下午茶"
+**Analysis Requirements:**
+1. Observe the user’s eating schedule (e.g., do they only eat two meals a day? What times do they usually eat?)
+2. Identify personalized habits (some people eat breakfast at 11:00, others eat dinner at 20:00)
+3. Determine whether certain meal types have already been eaten today
+4. If the current time matches the user’s historical pattern for a specific meal type, return that meal type
+5. If it is a snack time (between meals), return "Snack" or "Afternoon Tea"
 
-**可选餐型：**
-- 早餐
-- 午餐
-- 晚餐
-- 夜宵
-- 加餐
-- 下午茶
-- 早午餐（如果用户习惯10-12点吃第一餐）
+**Possible meal types:**
+- Breakfast
+- Lunch
+- Dinner
+- Midnight Snack
+- Snack
+- Afternoon Tea
+- Brunch (if the user usually eats their first meal between 10:00–12:00)
+- Morning Snack
+- Afternoon Snack
+- Evening Snack
 
-**输出格式（只输出餐型名称，不要其他解释）：**
-餐型名称
+**Output Format (only output the meal type name, no explanation):**
+Meal Type Name
 
-**示例：**
-如果用户历史记录显示：
-- 通常14:00吃第一餐
-- 通常20:00吃第二餐
-- 当前时间是14:30
-→ 输出：午餐
+**Examples:**
+If the user's history shows:
+- First meal at 14:00
+- Second meal at 20:00
+- Current time 14:30
+→ Output: Lunch
 
-如果用户已经在12:00吃过午餐，当前时间16:00
-→ 输出：下午茶
-"""
-    
+If user ate lunch at 12:00 and current time is 16:00:
+→ Output: Afternoon Tea
+"""    
     try:
-        # 调用 Qwen-Plus 进行推断
+        # Call Qwen model
         response = client.chat.completions.create(
             model=QWEN_TEXT_MODEL,
             messages=[
                 {
                     "role": "system",
-                    "content": "你是一个专业的作息分析专家，能够根据用户的历史数据准确判断餐型。"
+                    "content": "You are a professional daily-routine analysis expert who can accurately determine the meal type based on historical data."
                 },
                 {
                     "role": "user",
                     "content": prompt
                 }
             ],
-            temperature=0.3,  # 较低温度确保稳定输出
+            temperature=0.3,
         )
         
         content = response.choices[0].message.content
         
         if not content:
-            raise ValueError("模型返回内容为空")
+            raise ValueError("Model returned empty content")
         
-        # 提取餐型（去除多余空格和换行）
         meal_type = content.strip()
         
-        # 验证餐型是否合法
-        valid_types = ["早餐", "午餐", "晚餐", "夜宵", "加餐", "下午茶", "早午餐", 
-                      "早餐加餐", "午后加餐", "晚间加餐"]
-        
+        valid_types = [
+            "Breakfast",
+            "Lunch",
+            "Dinner",
+            "Midnight Snack",
+            "Snack",
+            "Afternoon Tea",
+            "Brunch",
+            "Morning Snack",
+            "Afternoon Snack",
+            "Evening Snack"
+        ]
+
+        # Exact match
         if meal_type in valid_types:
-            print(f"✅ LLM智能推断: {current_time} -> {meal_type}")
+            print(f"✅ LLM Inference: {current_time} -> {meal_type}")
             return meal_type
-        else:
-            # 如果返回的不是标准餐型，尝试从文本中提取
-            for vtype in valid_types:
-                if vtype in meal_type:
-                    print(f"✅ LLM智能推断: {current_time} -> {vtype} (从'{meal_type}'提取)")
-                    return vtype
-            
-            # 都失败了，fallback到规则推断
-            print(f"⚠️  LLM返回非标准餐型'{meal_type}'，使用规则推断")
-            hour = int(current_time.split(":")[0])
-            return _infer_with_rules(hour, today, recent_meals)
+        
+        # Partial match
+        for vtype in valid_types:
+            if vtype in meal_type:
+                print(f"✅ LLM Inference: {current_time} -> {vtype} (extracted from '{meal_type}')")
+                return vtype
+        
+        # Fallback
+        print(f"⚠️ LLM returned unknown meal type '{meal_type}', falling back to rule-based")
+        hour = int(current_time.split(":")[0])
+        return _infer_with_rules(hour, today, recent_meals)
     
     except Exception as e:
-        print(f"⚠️  LLM推断失败: {str(e)}，使用规则推断")
+        print(f"⚠️ LLM inference failed: {str(e)}, falling back to rule-based")
         hour = int(current_time.split(":")[0])
         return _infer_with_rules(hour, today, recent_meals)
 
 
 def get_meal_type_from_time(hour: int) -> str:
     """
-    纯粹基于小时数判断餐型（简化版本，向后兼容）
+    Rule-only meal type inference (simple)
     """
     if 5 <= hour < 10:
-        return "早餐"
+        return "Breakfast"
     elif 10 <= hour < 14:
-        return "午餐"
+        return "Lunch"
     elif 14 <= hour < 17:
-        return "下午茶"
+        return "Afternoon Tea"
     elif 17 <= hour < 21:
-        return "晚餐"
+        return "Dinner"
     else:
-        return "夜宵"
+        return "Midnight Snack"
 
 
-# 测试代码
+# Test code
 if __name__ == "__main__":
     print("="*70)
-    print("测试餐型推断功能")
+    print("Testing Meal Type Inference")
     print("="*70)
     
-    print("\n【场景1】冷启动 - 无历史数据，使用固定规则")
+    print("\n[Scenario 1] Cold Start - No history, use rule-based")
     print("-"*70)
     test_times = [
-        ("2025-12-08T07:30:00", "早上7:30"),
-        ("2025-12-08T12:00:00", "中午12:00"),
-        ("2025-12-08T15:00:00", "下午3:00"),
-        ("2025-12-08T18:30:00", "晚上6:30"),
-        ("2025-12-08T22:00:00", "晚上10:00"),
+        ("2025-12-08T07:30:00", "7:30 AM"),
+        ("2025-12-08T12:00:00", "12:00 PM"),
+        ("2025-12-08T15:00:00", "3:00 PM"),
+        ("2025-12-08T18:30:00", "6:30 PM"),
+        ("2025-12-08T22:00:00", "10:00 PM"),
     ]
     
     for timestamp, desc in test_times:
@@ -230,14 +242,14 @@ if __name__ == "__main__":
         })
         print(f"  {desc} -> {result}")
     
-    print("\n【场景2】有历史数据 - 今天已吃过同类餐型")
+    print("\n[Scenario 2] With History - Already ate same meal today")
     print("-"*70)
     mock_history_1 = [
         {
             "date": "2025-12-08",
             "meals": [
-                {"meal_type": "早餐", "timestamp": "2025-12-08T07:30:00"},
-                {"meal_type": "午餐", "timestamp": "2025-12-08T12:00:00"}
+                {"meal_type": "Breakfast", "timestamp": "2025-12-08T07:30:00"},
+                {"meal_type": "Lunch", "timestamp": "2025-12-08T12:00:00"}
             ]
         }
     ]
@@ -246,24 +258,24 @@ if __name__ == "__main__":
         "timestamp": "2025-12-08T13:00:00",
         "recent_meals": mock_history_1
     })
-    print(f"  下午1:00 (今天已吃过午餐) -> {result}")
+    print(f"  1:00 PM (already had Lunch today) -> {result}")
     
-    print("\n【场景3】LLM智能分析 - 用户每天只吃2顿（14:00 和 20:00）")
+    print("\n[Scenario 3] LLM Analysis - User eats only 2 meals (14:00 & 20:00)")
     print("-"*70)
-    # 模拟一个每天只吃2顿的用户（下午2点和晚上8点）
+    
     mock_history_2days = [
         {
             "date": "2025-12-06",
             "meals": [
-                {"meal_type": "午餐", "timestamp": "2025-12-06T14:00:00"},
-                {"meal_type": "晚餐", "timestamp": "2025-12-06T20:00:00"}
+                {"meal_type": "Lunch", "timestamp": "2025-12-06T14:00:00"},
+                {"meal_type": "Dinner", "timestamp": "2025-12-06T20:00:00"}
             ]
         },
         {
             "date": "2025-12-07",
             "meals": [
-                {"meal_type": "午餐", "timestamp": "2025-12-07T14:30:00"},
-                {"meal_type": "晚餐", "timestamp": "2025-12-07T20:15:00"}
+                {"meal_type": "Lunch", "timestamp": "2025-12-07T14:30:00"},
+                {"meal_type": "Dinner", "timestamp": "2025-12-07T20:15:00"}
             ]
         },
         {
@@ -272,42 +284,41 @@ if __name__ == "__main__":
         }
     ]
     
-    # 测试当前时间14:20
     result = infer_meal_type.invoke({
         "timestamp": "2025-12-08T14:20:00",
         "recent_meals": mock_history_2days
     })
-    print(f"  当前14:20 (用户习惯14:00吃第一餐) -> {result}")
+    print(f"  14:20 (user usually eats first meal around 14:00) -> {result}")
     
-    # 测试当前时间20:00
     result = infer_meal_type.invoke({
         "timestamp": "2025-12-08T20:00:00",
         "recent_meals": mock_history_2days
     })
-    print(f"  当前20:00 (用户习惯20:00吃第二餐) -> {result}")
+    print(f"  20:00 (user usually eats second meal at 20:00) -> {result}")
     
-    print("\n【场景4】LLM智能分析 - 用户习惯11点早午餐，19点晚餐")
+    print("\n[Scenario 4] LLM - User habit: Brunch at 11:00, dinner at 19:00")
     print("-"*70)
+    
     mock_history_brunch = [
         {
             "date": "2025-12-05",
             "meals": [
-                {"meal_type": "早午餐", "timestamp": "2025-12-05T11:00:00"},
-                {"meal_type": "晚餐", "timestamp": "2025-12-05T19:00:00"}
+                {"meal_type": "Brunch", "timestamp": "2025-12-05T11:00:00"},
+                {"meal_type": "Dinner", "timestamp": "2025-12-05T19:00:00"}
             ]
         },
         {
             "date": "2025-12-06",
             "meals": [
-                {"meal_type": "早午餐", "timestamp": "2025-12-06T11:30:00"},
-                {"meal_type": "晚餐", "timestamp": "2025-12-06T19:30:00"}
+                {"meal_type": "Brunch", "timestamp": "2025-12-06T11:30:00"},
+                {"meal_type": "Dinner", "timestamp": "2025-12-06T19:30:00"}
             ]
         },
         {
             "date": "2025-12-07",
             "meals": [
-                {"meal_type": "早午餐", "timestamp": "2025-12-07T10:45:00"},
-                {"meal_type": "晚餐", "timestamp": "2025-12-07T19:00:00"}
+                {"meal_type": "Brunch", "timestamp": "2025-12-07T10:45:00"},
+                {"meal_type": "Dinner", "timestamp": "2025-12-07T19:00:00"}
             ]
         },
         {
@@ -320,6 +331,6 @@ if __name__ == "__main__":
         "timestamp": "2025-12-08T11:15:00",
         "recent_meals": mock_history_brunch
     })
-    print(f"  当前11:15 (用户习惯11点早午餐) -> {result}")
+    print(f"  11:15 (user usually eats brunch around 11) -> {result}")
     
     print("\n" + "="*70)

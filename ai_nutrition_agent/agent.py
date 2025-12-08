@@ -87,6 +87,7 @@ Please execute step by step and provide me with a complete analysis report.
         
         try:
             result = self.agent_executor.invoke({"messages": [("user", query)]})
+            print(result)
             return result
         except Exception as e:
             print(f"Agent execution error: {str(e)}")

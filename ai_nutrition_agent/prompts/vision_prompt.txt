@@ -19,4 +19,4 @@ Output format must be a JSON array with structure:
     "reason": ""
   }
 ]
-No other irrelevant content should appear.
+No other irrelevant content should appear and all responses must be in english.

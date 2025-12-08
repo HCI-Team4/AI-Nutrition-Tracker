@@ -93,6 +93,10 @@ def detect_dishes_and_portions(image_path: str) -> str:
         # Add dish_id for each dish
         for i, dish in enumerate(dishes):
             dish["dish_id"] = f"dish_{i+1}"
+            
+        with open("output.json", "w", encoding="utf-8") as f:
+            json.dump(dishes, f, ensure_ascii=False, indent=2)
+
         
         # Return JSON string format
         result = {
