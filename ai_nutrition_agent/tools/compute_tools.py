@@ -1,5 +1,5 @@
 """
-ComputeTool - 计算整餐营养总量
+ComputeTool - Calculate total meal nutrition
 """
 import json
 from langchain.tools import tool
@@ -9,27 +9,27 @@ from typing import List, Dict, Any
 @tool
 def compute_meal_nutrition(portion_result: str) -> str:
     """
-    计算整餐的营养总量。
+    Calculate total nutrition for the meal.
     
-    参数:
-        portion_result: 分量验证结果JSON字符串，包含 {"dishes": [...], "image_path": "..."}
+    Args:
+        portion_result: Portion verification result JSON string, containing {"dishes": [...], "image_path": "..."}
     
-    返回:
-        JSON字符串格式: {"dishes": [...], "meal_nutrition_total": {...}, "image_path": "..."}
+    Returns:
+        JSON string format: {"dishes": [...], "meal_nutrition_total": {...}, "image_path": "..."}
     """
-    # 解析JSON字符串
+    # Parse JSON string
     try:
         portion_data = json.loads(portion_result)
     except json.JSONDecodeError as e:
-        print(f"⚠️  无法解析portion_result: {str(e)}")
-        return json.dumps({"dishes": [], "meal_nutrition_total": {}, "error": "JSON解析失败"}, ensure_ascii=False)
+        print(f"⚠️  Unable to parse portion_result: {str(e)}")
+        return json.dumps({"dishes": [], "meal_nutrition_total": {}, "error": "JSON parsing failed"}, ensure_ascii=False)
     
-    # 提取菜品列表和图片路径
+    # Extract dish list and image path
     dishes = portion_data.get("dishes", [])
     image_path = portion_data.get("image_path", "")
     
     if not dishes:
-        error_msg = "❌ compute_meal_nutrition: dishes列表为空"
+        error_msg = "❌ compute_meal_nutrition: dishes list is empty"
         print(error_msg)
         return json.dumps({
             "dishes": [],
@@ -38,7 +38,7 @@ def compute_meal_nutrition(portion_result: str) -> str:
             "error": error_msg
         }, ensure_ascii=False)
     
-    print(f"[DEBUG compute] 开始计算，共 {len(dishes)} 道菜")
+    print(f"[DEBUG compute] Starting calculation, total {len(dishes)} dishes")
     
     result_dishes = []
     meal_total = {

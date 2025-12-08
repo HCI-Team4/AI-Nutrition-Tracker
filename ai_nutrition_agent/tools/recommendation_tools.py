@@ -1,5 +1,5 @@
 """
-RecommendationTools - 使用Qwen-Plus提供下一餐推荐和趋势评分
+RecommendationTools - Use Qwen-Plus to provide next meal recommendations and trend scoring
 """
 import json
 import os
@@ -15,7 +15,7 @@ from config.settings import (
 )
 
 
-# 初始化OpenAI客户端
+# Initialize OpenAI client
 client = OpenAI(
     api_key=DASHSCOPE_API_KEY,
     base_url=QWEN_BASE_URL
@@ -25,15 +25,15 @@ client = OpenAI(
 @tool
 def score_current_meal_llm(nutrition: Dict[str, float]) -> Dict[str, Any]:
     """
-    使用Qwen-Plus对当前餐进行评分和建议(基于LLM)。
+    Use Qwen-Plus to score and advise on current meal (LLM-based).
     
-    参数:
-        nutrition: 当前餐的营养数据
+    Args:
+        nutrition: Current meal nutrition data
     
-    返回:
-        包含score和advice
+    Returns:
+        Contains score and advice
     """
-    # 读取提示词
+    # Read prompt
     prompt_path = os.path.join(PROMPTS_DIR, "score_prompt.txt")
     with open(prompt_path, "r", encoding="utf-8") as f:
         system_prompt = f.read()

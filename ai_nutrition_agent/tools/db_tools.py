@@ -1,5 +1,5 @@
 """
-DatabaseTools - JSON数据库读写工具
+DatabaseTools - JSON database read/write tools
 """
 import json
 import os
@@ -11,42 +11,42 @@ from config.settings import DB_PATH, RECENT_DAYS
 
 
 def _load_json() -> Dict[str, Any]:
-    """加载JSON数据库"""
+    """Load JSON database"""
     initial_data = {
         "user_id": "user001",
         "days": []
     }
     
     if not os.path.exists(DB_PATH):
-        # 如果文件不存在，创建初始结构
-        print(f"[DEBUG] 数据库文件不存在，创建新文件: {DB_PATH}")
+        # If file doesn't exist, create initial structure
+        print(f"[DEBUG] Database file doesn't exist, creating new file: {DB_PATH}")
         _save_json(initial_data)
         return initial_data
     
     try:
         with open(DB_PATH, "r", encoding="utf-8") as f:
             content = f.read().strip()
-            # 检查文件是否为空
+            # Check if file is empty
             if not content:
-                print(f"[DEBUG] 数据库文件为空，初始化新数据")
+                print(f"[DEBUG] Database file is empty, initializing new data")
                 _save_json(initial_data)
                 return initial_data
             return json.loads(content)
     except json.JSONDecodeError as e:
-        print(f"⚠️  数据库JSON格式错误: {str(e)}")
-        print(f"[DEBUG] 将重新初始化数据库")
+        print(f"⚠️  Database JSON format error: {str(e)}")
+        print(f"[DEBUG] Will reinitialize database")
         _save_json(initial_data)
         return initial_data
     except Exception as e:
-        print(f"❌ 加载数据库错误: {str(e)}")
+        print(f"❌ Database loading error: {str(e)}")
         import traceback
         traceback.print_exc()
-        print(f"[DEBUG] 返回空数据结构")
+        print(f"[DEBUG] Returning empty data structure")
         return initial_data
 
 
 def _save_json(data: Dict[str, Any]) -> None:
-    """保存JSON数据库"""
+    """Save JSON database"""
     try:
         # 确保目录存在
         os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)

@@ -1,6 +1,6 @@
 """
-智能餐型推断工具
-结合固定规则（冷启动）和LLM智能分析（学习用户作息习惯）
+Intelligent Meal Type Inference Tool
+Combines fixed rules (cold start) and LLM intelligent analysis (learn user schedule habits)
 """
 import json
 from datetime import datetime
@@ -15,7 +15,7 @@ from config.settings import (
 )
 
 
-# 初始化 OpenAI 客户端(兼容 Qwen API)
+# Initialize OpenAI client (compatible with Qwen API)
 client = OpenAI(
     api_key=DASHSCOPE_API_KEY,
     base_url=QWEN_BASE_URL
@@ -25,20 +25,20 @@ client = OpenAI(
 @tool
 def infer_meal_type(timestamp: Optional[str] = None, recent_meals: Optional[list] = None) -> str:
     """
-    智能推断餐型。
+    Intelligently infer meal type.
     
-    策略：
-    - 冷启动（历史数据<3天）：使用固定时间规则
-    - 有历史数据：调用LLM分析用户作息习惯，智能推断
+    Strategy:
+    - Cold start (historical data < 3 days): Use fixed time rules
+    - With historical data: Call LLM to analyze user schedule habits, intelligently infer
     
-    参数:
-        timestamp: ISO格式时间戳（可选，默认当前时间）
-        recent_meals: 最近的用餐记录（可选）
+    Args:
+        timestamp: ISO format timestamp (optional, defaults to current time)
+        recent_meals: Recent meal records (optional)
     
-    返回:
-        餐型: 早餐/午餐/晚餐/夜宵/加餐等
+    Returns:
+        Meal type: Breakfast/Lunch/Dinner/Late-night Snack/Snack, etc.
     """
-    # 解析时间
+    # Parse time
     if timestamp:
         dt = datetime.fromisoformat(timestamp)
     else:
