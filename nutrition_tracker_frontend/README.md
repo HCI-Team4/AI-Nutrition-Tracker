@@ -8,7 +8,7 @@ touch .env
 ```
 add the API_URL to it, by default:
 ```.env
-NEX_PUBLIC_API_URL=http://localhost:4000
+NEXT_PUBLIC_API_URL=http://localhost:4000
 ```
 
 
