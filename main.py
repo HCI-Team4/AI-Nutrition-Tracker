@@ -60,7 +60,7 @@ def analyze_meal_from_image():
     image_path = input("Image path: ").strip().strip("'\"")  # Remove quotes
     
     if not image_path:
-        print_error("未Input image path")
+        print_error("No image path provided")
         return
     
     if not os.path.exists(image_path):
@@ -109,7 +109,7 @@ def analyze_meal_from_image():
     print("="*70)
     print()
     
-    # 显示执行步骤
+    # Display execution steps
     print("🤖 Agent will automatically execute the following steps:")
     print("   1️⃣  Image Recognition (Qwen-VL) - Identify all dishes")
     print("   2️⃣  Portion Verification - Confirm weight reasonability")
@@ -123,14 +123,14 @@ def analyze_meal_from_image():
     print_progress("Agent starting work, please wait...")
     print()
     
-    # 记录开始Time
+    # Record start time
     start_time = datetime.now()
     
-    # 执行分析
+    # Execute analysis
     try:
         result = agent.analyze_meal(image_path, meal_type)
         
-        # 计算耗时
+        # Calculate duration
         end_time = datetime.now()
         duration = (end_time - start_time).total_seconds()
         
@@ -140,7 +140,7 @@ def analyze_meal_from_image():
         print("="*70)
         print()
         
-        # 提取并显示结果
+        # Extract and display results
         if "messages" in result:
             messages = result["messages"]
             if messages:
@@ -200,7 +200,7 @@ def quick_query_history():
         result = agent.query_history(days)
         
         print("="*70)
-        print(f"📈 最近 {days} 天的饮食记录".center(70))
+        print(f"📈 Recent {days} Days of Diet Records".center(70))
         print("="*70)
         print()
         
@@ -218,16 +218,16 @@ def quick_query_history():
         print()
         
     except Exception as e:
-        print_error(f"查询失败: {str(e)}")
+        print_error(f"Query failed: {str(e)}")
 
 
 def main_menu():
-    """主菜单"""
+    """Main menu"""
     print_header()
     
     print("Please select a function:")
     print()
-    print("  1. 📸 分析餐盘Image (一键完成所有步骤)")
+    print("  1. 📸 Analyze meal image (one-click complete all steps)")
     print("  2. 📈 Query history")
     print("  3. 💡 Get next meal recommendation")
     print("  4. 🚪 Exit")
@@ -251,7 +251,7 @@ def main_menu():
             result = agent.get_recommendation()
             
             print("="*70)
-            print("💡 下一餐推荐".center(70))
+            print("💡 Next Meal Recommendation".center(70))
             print("="*70)
             print()
             
@@ -268,18 +268,18 @@ def main_menu():
             
             print()
         except Exception as e:
-            print_error(f"推荐生成失败: {str(e)}")
+            print_error(f"Recommendation generation failed: {str(e)}")
     elif choice == "4":
         print()
-        print("👋 谢谢使用，Goodbye!")
+        print("👋 Thank you for using, Goodbye!")
         print()
         return
     else:
-        print_error("无效选项")
+        print_error("Invalid option")
     
-    # 询问是否继续
+    # Ask whether to continue
     print()
-    continue_choice = input("Return to main menu? (y/n，defaulty): ").strip().lower()
+    continue_choice = input("Return to main menu? (y/n, default y): ").strip().lower()
     if continue_choice != "n":
         main_menu()
 

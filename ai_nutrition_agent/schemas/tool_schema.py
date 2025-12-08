@@ -1,80 +1,80 @@
 """
-工具调用的输入输出Schema定义
-用于LangChain工具的参数验证
+Input/Output Schema definitions for tool invocation
+Used for parameter validation in LangChain tools
 """
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any
 
 
 class VisionInput(BaseModel):
-    """图像识别工具输入"""
-    image_path: str = Field(..., description="图片文件路径")
+    """Image recognition tool input"""
+    image_path: str = Field(..., description="Image file path")
 
 
 class DishDetectionOutput(BaseModel):
-    """菜品识别输出"""
-    name: str = Field(..., description="菜品名称")
-    category: str = Field(..., description="菜品类别")
-    estimated_weight_g: float = Field(..., description="估计重量(克)")
-    portion_level: str = Field(..., description="份量等级")
-    reason: str = Field(..., description="估计理由")
+    """Dish detection output"""
+    name: str = Field(..., description="Dish name")
+    category: str = Field(..., description="Dish category")
+    estimated_weight_g: float = Field(..., description="Estimated weight (grams)")
+    portion_level: str = Field(..., description="Portion level")
+    reason: str = Field(..., description="Estimation reason")
 
 
 class PortionCheckInput(BaseModel):
-    """分量校验工具输入"""
-    dishes: List[Dict[str, Any]] = Field(..., description="待校验的菜品列表")
+    """Portion verification tool input"""
+    dishes: List[Dict[str, Any]] = Field(..., description="List of dishes to verify")
 
 
 class PortionCheckOutput(BaseModel):
-    """分量校验输出"""
-    dish_id: str = Field(..., description="菜品ID")
-    is_reasonable: bool = Field(..., description="是否合理")
-    reason: str = Field(..., description="判断理由")
-    final_weight_g: float = Field(..., description="最终重量(克)")
+    """Portion verification output"""
+    dish_id: str = Field(..., description="Dish ID")
+    is_reasonable: bool = Field(..., description="Whether it is reasonable")
+    reason: str = Field(..., description="Judgment reason")
+    final_weight_g: float = Field(..., description="Final weight (grams)")
 
 
 class NutritionQuery(BaseModel):
-    """营养查询工具输入"""
-    dish_name: str = Field(..., description="菜品名称")
+    """Nutrition query tool input"""
+    dish_name: str = Field(..., description="Dish name")
 
 
 class NutritionQueryOutput(BaseModel):
-    """营养查询输出"""
-    calories: float = Field(..., description="热量(kcal/100g)")
-    protein: float = Field(..., description="蛋白质(g/100g)")
-    fat: float = Field(..., description="脂肪(g/100g)")
-    carbs: float = Field(..., description="碳水化合物(g/100g)")
-    sodium: float = Field(..., description="钠(mg/100g)")
+    """Nutrition query output"""
+    calories: float = Field(..., description="Calories (kcal/100g)")
+    protein: float = Field(..., description="Protein (g/100g)")
+    fat: float = Field(..., description="Fat (g/100g)")
+    carbs: float = Field(..., description="Carbohydrates (g/100g)")
+    sodium: float = Field(..., description="Sodium (mg/100g)")
 
 
 class ComputeNutritionInput(BaseModel):
-    """营养计算工具输入"""
-    dishes: List[Dict[str, Any]] = Field(..., description="菜品列表(含重量和每100g营养)")
+    """Nutrition calculation tool input"""
+    dishes: List[Dict[str, Any]] = Field(..., description="Dishes list (with weight and nutrition per 100g)")
 
 
 class ScoreInput(BaseModel):
-    """评分工具输入"""
-    nutrition: Dict[str, float] = Field(..., description="营养数据")
+    """Scoring tool input"""
+    nutrition: Dict[str, float] = Field(..., description="Nutrition data")
 
 
 class ScoreOutput(BaseModel):
-    """评分输出"""
-    score: int = Field(..., ge=0, le=100, description="评分(0-100)")
-    advice: str = Field(..., description="建议")
+    """Scoring output"""
+    score: int = Field(..., ge=0, le=100, description="Score (0-100)")
+    advice: str = Field(..., description="Advice")
 
 
 class TrendScoreInput(BaseModel):
-    """趋势评分工具输入"""
-    current_meal: Dict[str, Any] = Field(..., description="当前餐营养")
-    weekly_trend: Dict[str, Any] = Field(..., description="一周趋势数据")
+    """Trend scoring tool input"""
+    current_meal: Dict[str, Any] = Field(..., description="Current meal nutrition")
+    weekly_trend: Dict[str, Any] = Field(..., description="Weekly trend data")
 
 
 class RecommendationInput(BaseModel):
-    """推荐工具输入"""
-    current_nutrition: Dict[str, Any] = Field(..., description="当前餐营养")
-    recent_history: Dict[str, Any] = Field(..., description="最近历史数据")
+    """Recommendation tool input"""
+    current_nutrition: Dict[str, Any] = Field(..., description="Current meal nutrition")
+    recent_history: Dict[str, Any] = Field(..., description="Recent history data")
 
 
 class SaveMealInput(BaseModel):
-    """保存餐食工具输入"""
-    meal: Dict[str, Any] = Field(..., description="完整的餐食数据")
+    """Save meal tool input"""
+    meal: Dict[str, Any] = Field(..., description="Complete meal data")

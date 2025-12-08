@@ -1,6 +1,6 @@
 """
-图形界面版本 - 智能营养分析系统
-一键选择图片，自动完成所有分析步骤
+GUI Version - Intelligent Nutrition Analysis System
+One-click image selection, automatically complete all analysis steps
 """
 import os
 import sys
@@ -9,22 +9,22 @@ from tkinter import filedialog, scrolledtext, ttk
 from datetime import datetime
 import threading
 
-# 添加项目根目录到路径
+# Add project root to path
 sys.path.insert(0, os.path.dirname(__file__))
 
 from agent import NutritionAgent
 
 
 class NutritionAnalyzerGUI:
-    """营养分析系统图形界面"""
+    """Nutrition Analysis System GUI"""
     
     def __init__(self, root):
         self.root = root
-        self.root.title("🍽️ 智能营养分析系统")
+        self.root.title("🍽️ Intelligent Nutrition Analysis System")
         self.root.geometry("900x700")
         self.root.configure(bg="#f0f0f0")
         
-        # 初始化Agent
+        # Initialize Agent
         self.agent = None
         self.analyzing = False
         
@@ -32,15 +32,15 @@ class NutritionAnalyzerGUI:
         self.init_agent()
     
     def setup_ui(self):
-        """设置界面布局"""
-        # 标题区域
+        """Setup UI layout"""
+        # Title area
         title_frame = tk.Frame(self.root, bg="#2c3e50", height=80)
         title_frame.pack(fill=tk.X)
         title_frame.pack_propagate(False)
         
         title_label = tk.Label(
             title_frame,
-            text="🍽️ 智能营养分析系统",
+            text="🍽️ Intelligent Nutrition Analysis System",
             font=("Arial", 24, "bold"),
             fg="white",
             bg="#2c3e50"
@@ -49,34 +49,34 @@ class NutritionAnalyzerGUI:
         
         subtitle_label = tk.Label(
             title_frame,
-            text="基于 LangChain 1.0 + 阿里通义千问",
+            text="Based on LangChain 1.0 + Alibaba Qwen",
             font=("Arial", 10),
             fg="#ecf0f1",
             bg="#2c3e50"
         )
         subtitle_label.pack()
         
-        # 主操作区域
+        # Main operation area
         main_frame = tk.Frame(self.root, bg="#f0f0f0", pady=20)
         main_frame.pack(fill=tk.BOTH, expand=True, padx=20)
         
-        # 图片选择区域
+        # Image selection area
         image_frame = tk.Frame(main_frame, bg="#ffffff", relief=tk.RAISED, borderwidth=2)
         image_frame.pack(fill=tk.X, pady=(0, 20))
         
         image_label = tk.Label(
             image_frame,
-            text="📸 选择餐盘图片",
+            text="📸 Select Meal Image",
             font=("Arial", 14, "bold"),
             bg="#ffffff",
             pady=10
         )
         image_label.pack()
         
-        # 选择图片按钮
+        # Select image button
         self.select_button = tk.Button(
             image_frame,
-            text="🖼️ 选择图片并开始分析",
+            text="🖼️ Select Image and Start Analysis",
             font=("Arial", 14, "bold"),
             bg="#3498db",
             fg="white",
@@ -91,19 +91,19 @@ class NutritionAnalyzerGUI:
         )
         self.select_button.pack(pady=20)
         
-        # 餐型选择
+        # Meal type selection
         meal_type_frame = tk.Frame(image_frame, bg="#ffffff")
         meal_type_frame.pack(pady=(0, 15))
         
         tk.Label(
             meal_type_frame,
-            text="餐型: ",
+            text="Meal Type: ",
             font=("Arial", 11),
             bg="#ffffff"
         ).pack(side=tk.LEFT, padx=(0, 10))
         
-        self.meal_type_var = tk.StringVar(value="午餐")
-        meal_types = ["早餐", "午餐", "晚餐", "加餐"]
+        self.meal_type_var = tk.StringVar(value="Lunch")
+        meal_types = ["Breakfast", "Lunch", "Dinner", "Snack"]
         for meal_type in meal_types:
             tk.Radiobutton(
                 meal_type_frame,
@@ -115,10 +115,10 @@ class NutritionAnalyzerGUI:
                 activebackground="#ffffff"
             ).pack(side=tk.LEFT, padx=5)
         
-        # 图片路径显示
+        # Image path display
         self.image_path_label = tk.Label(
             image_frame,
-            text="未选择图片",
+            text="No image selected",
             font=("Arial", 10),
             fg="#7f8c8d",
             bg="#ffffff",
@@ -126,7 +126,7 @@ class NutritionAnalyzerGUI:
         )
         self.image_path_label.pack()
         
-        # 进度条
+        # Progress bar
         self.progress_frame = tk.Frame(main_frame, bg="#f0f0f0")
         self.progress_frame.pack(fill=tk.X, pady=(0, 10))
         
@@ -145,20 +145,20 @@ class NutritionAnalyzerGUI:
             length=400
         )
         
-        # 结果显示区域
+        # Result display area
         result_frame = tk.Frame(main_frame, bg="#ffffff", relief=tk.RAISED, borderwidth=2)
         result_frame.pack(fill=tk.BOTH, expand=True)
         
         result_title = tk.Label(
             result_frame,
-            text="📊 分析结果",
+            text="📊 Analysis Results",
             font=("Arial", 14, "bold"),
             bg="#ffffff",
             pady=10
         )
         result_title.pack()
         
-        # 结果文本区域（支持滚动）
+        # Result text area (scrollable)
         self.result_text = scrolledtext.ScrolledText(
             result_frame,
             font=("Consolas", 10),
@@ -171,14 +171,14 @@ class NutritionAnalyzerGUI:
         )
         self.result_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=(0, 10))
         
-        # 状态栏
+        # Status bar
         status_frame = tk.Frame(self.root, bg="#34495e", height=30)
         status_frame.pack(side=tk.BOTTOM, fill=tk.X)
         status_frame.pack_propagate(False)
         
         self.status_label = tk.Label(
             status_frame,
-            text="准备就绪",
+            text="Ready",
             font=("Arial", 9),
             fg="white",
             bg="#34495e",
@@ -188,52 +188,52 @@ class NutritionAnalyzerGUI:
         self.status_label.pack(fill=tk.X)
     
     def init_agent(self):
-        """初始化Agent（异步）"""
+        """Initialize Agent (asynchronous)"""
         def _init():
             try:
-                self.update_status("正在初始化 Agent...")
+                self.update_status("Initializing Agent...")
                 self.agent = NutritionAgent()
-                self.update_status("✅ Agent 初始化完成！准备就绪")
-                self.log_result("✅ 系统初始化成功！\n\n请点击按钮选择餐盘图片开始分析。\n")
+                self.update_status("✅ Agent initialization complete! Ready")
+                self.log_result("✅ System initialization successful!\n\nPlease click the button to select a meal image to start analysis.\n")
             except Exception as e:
-                self.update_status(f"❌ 初始化失败: {str(e)}")
-                self.log_result(f"❌ 初始化错误:\n{str(e)}\n\n请检查配置和网络连接。")
+                self.update_status(f"❌ Initialization failed: {str(e)}")
+                self.log_result(f"❌ Initialization error:\n{str(e)}\n\nPlease check configuration and network connection.")
         
         threading.Thread(target=_init, daemon=True).start()
     
     def select_and_analyze(self):
-        """选择图片并自动分析"""
+        """Select image and analyze automatically"""
         if self.analyzing:
             return
         
         if not self.agent:
-            self.log_result("❌ Agent 尚未初始化完成，请稍候...\n")
+            self.log_result("❌ Agent not yet initialized, please wait...\n")
             return
         
-        # 打开文件选择对话框
+        # Open file selection dialog
         file_path = filedialog.askopenfilename(
-            title="选择餐盘图片",
+            title="Select Meal Image",
             filetypes=[
-                ("图片文件", "*.jpg *.jpeg *.png *.bmp *.gif"),
-                ("所有文件", "*.*")
+                ("Image Files", "*.jpg *.jpeg *.png *.bmp *.gif"),
+                ("All Files", "*.*")
             ]
         )
         
         if not file_path:
-            return  # 用户取消选择
+            return  # User canceled selection
         
-        # 显示选择的文件
+        # Display selected file
         self.image_path_label.config(
-            text=f"已选择: {os.path.basename(file_path)}",
+            text=f"Selected: {os.path.basename(file_path)}",
             fg="#27ae60"
         )
         
-        # 开始分析
+        # Start analysis
         meal_type = self.meal_type_var.get()
         self.start_analysis(file_path, meal_type)
     
     def start_analysis(self, image_path: str, meal_type: str):
-        """开始分析（异步）"""
+        """Start analysis (asynchronous)"""
         if self.analyzing:
             return
         
@@ -241,76 +241,76 @@ class NutritionAnalyzerGUI:
         self.select_button.config(state=tk.DISABLED, bg="#95a5a6")
         self.result_text.delete(1.0, tk.END)
         
-        # 显示进度条
-        self.progress_label.config(text="🔄 正在分析中，请稍候...")
+        # Show progress bar
+        self.progress_label.config(text="🔄 Analyzing, please wait...")
         self.progress_bar.pack(pady=5)
         self.progress_bar.start(10)
         
         def _analyze():
             try:
-                self.update_status(f"正在分析 {meal_type}...")
+                self.update_status(f"Analyzing {meal_type}...")
                 
-                # 记录开始时间
+                # Record start time
                 start_time = datetime.now()
                 self.log_result(f"{'='*60}\n")
-                self.log_result(f"🍽️  开始分析: {meal_type}\n")
-                self.log_result(f"📸 图片: {os.path.basename(image_path)}\n")
-                self.log_result(f"⏰ 时间: {start_time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                self.log_result(f"🍽️  Starting Analysis: {meal_type}\n")
+                self.log_result(f"📸 Image: {os.path.basename(image_path)}\n")
+                self.log_result(f"⏰ Time: {start_time.strftime('%Y-%m-%d %H:%M:%S')}\n")
                 self.log_result(f"{'='*60}\n\n")
                 
-                self.log_result("🔄 Agent 正在执行以下步骤:\n")
-                self.log_result("  1️⃣  图像识别 (Qwen-VL)\n")
-                self.log_result("  2️⃣  分量验证\n")
-                self.log_result("  3️⃣  营养查询\n")
-                self.log_result("  4️⃣  营养计算\n")
-                self.log_result("  5️⃣  健康评分\n")
-                self.log_result("  6️⃣  趋势分析\n")
-                self.log_result("  7️⃣  下一餐推荐\n")
-                self.log_result("  8️⃣  保存数据\n\n")
+                self.log_result("🔄 Agent is executing the following steps:\n")
+                self.log_result("  1️⃣  Image Recognition (Qwen-VL)\n")
+                self.log_result("  2️⃣  Portion Verification\n")
+                self.log_result("  3️⃣  Nutrition Query\n")
+                self.log_result("  4️⃣  Nutrition Calculation\n")
+                self.log_result("  5️⃣  Health Scoring\n")
+                self.log_result("  6️⃣  Trend Analysis\n")
+                self.log_result("  7️⃣  Next Meal Recommendation\n")
+                self.log_result("  8️⃣  Save Data\n\n")
                 
-                # 执行分析
+                # Execute analysis
                 result = self.agent.analyze_meal(image_path, meal_type)
                 
-                # 计算耗时
+                # Calculate duration
                 end_time = datetime.now()
                 duration = (end_time - start_time).total_seconds()
                 
-                # 显示结果
+                # Display results
                 self.log_result(f"\n{'='*60}\n")
-                self.log_result(f"✅ 分析完成！\n")
-                self.log_result(f"⏱️  耗时: {duration:.2f} 秒\n")
+                self.log_result(f"✅ Analysis complete!\n")
+                self.log_result(f"⏱️  Duration: {duration:.2f} seconds\n")
                 self.log_result(f"{'='*60}\n\n")
                 
-                # 显示Agent的输出
+                # Display Agent's output
                 if "messages" in result:
-                    # 提取最后一条消息（Agent的最终回复）
+                    # Extract last message (Agent's final reply)
                     messages = result["messages"]
                     if messages:
                         final_message = messages[-1]
                         if hasattr(final_message, 'content'):
-                            self.log_result("📊 分析报告:\n\n")
+                            self.log_result("📊 Analysis Report:\n\n")
                             self.log_result(final_message.content)
                         else:
                             self.log_result(str(final_message))
                 else:
                     self.log_result(str(result))
                 
-                self.update_status(f"✅ 分析完成！耗时 {duration:.2f} 秒")
+                self.update_status(f"✅ Analysis complete! Duration {duration:.2f} seconds")
                 
             except Exception as e:
-                self.log_result(f"\n❌ 分析过程中出现错误:\n")
+                self.log_result(f"\n❌ Error during analysis:\n")
                 self.log_result(f"{str(e)}\n")
-                self.update_status(f"❌ 分析失败: {str(e)}")
+                self.update_status(f"❌ Analysis failed: {str(e)}")
             
             finally:
-                # 恢复界面状态
+                # Restore UI state
                 self.root.after(0, self._finish_analysis)
         
-        # 在后台线程中执行
+        # Execute in background thread
         threading.Thread(target=_analyze, daemon=True).start()
     
     def _finish_analysis(self):
-        """完成分析后的界面恢复"""
+        """Restore UI after analysis completion"""
         self.analyzing = False
         self.select_button.config(state=tk.NORMAL, bg="#3498db")
         self.progress_bar.stop()
@@ -318,19 +318,19 @@ class NutritionAnalyzerGUI:
         self.progress_label.config(text="")
     
     def log_result(self, message: str):
-        """添加日志到结果区域"""
+        """Add log to result area"""
         self.result_text.insert(tk.END, message)
         self.result_text.see(tk.END)
         self.root.update_idletasks()
     
     def update_status(self, message: str):
-        """更新状态栏"""
+        """Update status bar"""
         self.status_label.config(text=message)
         self.root.update_idletasks()
 
 
 def main():
-    """主函数"""
+    """Main function"""
     root = tk.Tk()
     app = NutritionAnalyzerGUI(root)
     root.mainloop()

@@ -1,6 +1,6 @@
 """
-NutritionTool - 联网查询菜品营养数据
-使用 Qwen-Plus + 联网搜索 获取实时准确的营养信息
+NutritionTool - Online query dish nutrition data
+Use Qwen-Plus + web search to get real-time accurate nutrition information
 """
 import json
 from openai import OpenAI
@@ -14,7 +14,7 @@ from config.settings import (
 )
 
 
-# 初始化 OpenAI 客户端(兼容 Qwen API)
+# Initialize OpenAI client (compatible with Qwen API)
 client = OpenAI(
     api_key=DASHSCOPE_API_KEY,
     base_url=QWEN_BASE_URL
@@ -24,15 +24,15 @@ client = OpenAI(
 @tool
 def query_nutrition_per_100g(dish_name: str) -> Dict[str, float]:
     """
-    联网查询菜品的每100g营养成分。使用Qwen-Plus模型结合网络搜索获取最准确的营养数据。
+    Query nutrition per 100g of a dish online. Use Qwen-Plus model combined with web search to get the most accurate nutrition data.
     
-    参数:
-        dish_name: 菜品名称
+    Args:
+        dish_name: Dish name
     
-    返回:
-        营养成分字典，包含: calories, protein, fat, carbs, sodium
+    Returns:
+        Nutrition dictionary containing: calories, protein, fat, carbs, sodium
     """
-    print(f"[DEBUG nutrition] 查询菜品: {dish_name}")
+    print(f"[DEBUG nutrition] Querying dish: {dish_name}")
     
     # 构造查询提示词
     prompt = f"""请查询"{dish_name}"每100克的营养成分数据。
