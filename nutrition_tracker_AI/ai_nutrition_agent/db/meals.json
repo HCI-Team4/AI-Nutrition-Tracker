@@ -1,0 +1,174 @@
+{
+  "user_id": "user001",
+  "days": [
+    {
+      "date": "2025-12-08",
+      "daily_summary": {
+        "total_calories": 2700.0,
+        "total_protein": 150.0,
+        "total_fat": 105.5,
+        "total_carbs": 308.0,
+        "total_sodium": 7100.0,
+        "daily_score": 0
+      },
+      "meals": [
+        {
+          "dishes": [
+            {
+              "name": "鸡肉炒饭",
+              "category": "Staple",
+              "estimated_weight_g": 500,
+              "portion_level": "large",
+              "reason": "碗中盛满炒饭，体积较大，根据常见餐量估算约为500克。",
+              "dish_id": "dish_1",
+              "final_weight_g": 500,
+              "is_reasonable": true,
+              "verification_reason": "",
+              "nutrition_per_100g": {
+                "calories": 130.0,
+                "protein": 7.5,
+                "fat": 4.2,
+                "carbs": 16.8,
+                "sodium": 320.0
+              },
+              "nutrition_total": {
+                "calories": 650.0,
+                "protein": 37.5,
+                "fat": 21.0,
+                "carbs": 84.0,
+                "sodium": 1600.0
+              }
+            }
+          ],
+          "meal_nutrition_total": {
+            "calories": 650.0,
+            "protein": 37.5,
+            "fat": 21.0,
+            "carbs": 84.0,
+            "sodium": 1600.0
+          },
+          "image_path": "/home/salami/Pictures/fried_rice.jpg",
+          "meal_id": "meal_2025-12-08_1",
+          "timestamp": "2025-12-08T22:07:06.102487"
+        },
+        {
+          "dishes": [
+            {
+              "name": "鸡肉炒饭",
+              "category": "Staple",
+              "estimated_weight_g": 500,
+              "portion_level": "large",
+              "reason": "碗中盛满炒饭，体积较大，根据常见餐量估算约为500克。",
+              "dish_id": "dish_1",
+              "final_weight_g": 500,
+              "is_reasonable": true,
+              "verification_reason": "",
+              "nutrition_per_100g": {
+                "calories": 130.0,
+                "protein": 7.5,
+                "fat": 4.2,
+                "carbs": 16.8,
+                "sodium": 320.0
+              },
+              "nutrition_total": {
+                "calories": 650.0,
+                "protein": 37.5,
+                "fat": 21.0,
+                "carbs": 84.0,
+                "sodium": 1600.0
+              }
+            }
+          ],
+          "meal_nutrition_total": {
+            "calories": 650.0,
+            "protein": 37.5,
+            "fat": 21.0,
+            "carbs": 84.0,
+            "sodium": 1600.0
+          },
+          "image_path": "/home/salami/Pictures/fried_rice.jpg",
+          "meal_id": "meal_2025-12-08_2",
+          "timestamp": "2025-12-08T22:55:46.924349"
+        },
+        {
+          "dishes": [
+            {
+              "name": "鸡肉炒饭",
+              "category": "Staple",
+              "estimated_weight_g": 500,
+              "portion_level": "large",
+              "reason": "碗中盛满炒饭，体积较大，根据常见餐量估算约为500克。",
+              "dish_id": "dish_1",
+              "final_weight_g": 500,
+              "is_reasonable": true,
+              "verification_reason": "",
+              "nutrition_per_100g": {
+                "calories": 130.0,
+                "protein": 7.5,
+                "fat": 6.2,
+                "carbs": 12.8,
+                "sodium": 380.0
+              },
+              "nutrition_total": {
+                "calories": 650.0,
+                "protein": 37.5,
+                "fat": 31.0,
+                "carbs": 64.0,
+                "sodium": 1900.0
+              }
+            }
+          ],
+          "meal_nutrition_total": {
+            "calories": 650.0,
+            "protein": 37.5,
+            "fat": 31.0,
+            "carbs": 64.0,
+            "sodium": 1900.0
+          },
+          "image_path": "/home/salami/Pictures/fried_rice.jpg",
+          "meal_id": "meal_2025-12-08_3",
+          "timestamp": "2025-12-08T23:13:40.357998"
+        },
+        {
+          "dishes": [
+            {
+              "name": "Chicken Fried Rice",
+              "category": "Staple",
+              "estimated_weight_g": 500,
+              "portion_level": "large",
+              "reason": "The bowl is filled to the brim with fried rice, indicating a generous serving. The visible ingredients (rice, chicken, carrots, peas) suggest a substantial portion typical of a main course.",
+              "dish_id": "dish_1",
+              "final_weight_g": 500,
+              "is_reasonable": true,
+              "verification_reason": "",
+              "nutrition_per_100g": {
+                "calories": 150.0,
+                "protein": 7.5,
+                "fat": 6.5,
+                "carbs": 15.2,
+                "sodium": 400.0
+              },
+              "nutrition_total": {
+                "calories": 750.0,
+                "protein": 37.5,
+                "fat": 32.5,
+                "carbs": 76.0,
+                "sodium": 2000.0
+              }
+            }
+          ],
+          "meal_nutrition_total": {
+            "calories": 750.0,
+            "protein": 37.5,
+            "fat": 32.5,
+            "carbs": 76.0,
+            "sodium": 2000.0
+          },
+          "image_path": "/home/salami/Pictures/fried_rice.jpg",
+          "meal_id": "meal_2025-12-08_4",
+          "timestamp": "2025-12-08T23:15:23.493765"
+        }
+      ]
+    }
+  ]
+}
