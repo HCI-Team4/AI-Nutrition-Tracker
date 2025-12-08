@@ -1,6 +1,9 @@
 import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 const dataDir = path.join(process.cwd(), "data");
 const usersFile = path.join(process.cwd(), "data", "users.json");
@@ -50,9 +53,23 @@ export const signup = async (req , res) => {
     const newUser= { email, hashedPassword, name, age, weight, height };
     users.push(newUser);
 
+    const token = jwt.sign(
+        { email: newUser.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+     );
     saveUsers(users);
 
-    return res.status(201).json({ message: "User registered successfully", user: newUser });
+    return res.status(201).json({ 
+        message: "User registered successfully",
+        token,
+        user:{
+        email: newUser.email,
+        name: newUser.name,
+        age: newUser.age,
+        weight: newUser.weight,
+        height: newUser.height
+        } });
 };
 
 // ======================== LOGIN =========================
@@ -75,9 +92,22 @@ export const login = async (req, res) => {
       return res.status(400).json({ error: "Invalid credentials" });
     }
 
+    const token = jwt.sign(
+        { email: user.email },
+        process.env.JWT_SECRET,
+        { expiresIn: "7d" }
+     );
+
     return res.status(200).json({
         message: "Login successful",
-        user
+        token,
+        user:{
+        email: user.email,
+        name: user.name,
+        age: user.age,
+        weight: user.weight,
+        height: user.height
+        }
     });
 };
 

@@ -27,6 +27,7 @@ export default function AuthPage() {
         e.preventDefault()
         setError("")
         setIsLoading(true)
+        console.log("test");
 
         try {
             const endpoint = mode === "login" ? `${API_URL}/auth/login` : `${API_URL}/auth/signup`
@@ -49,7 +50,11 @@ export default function AuthPage() {
                 return
             }
 
+            console.log(data);
+
             // Store user in localStorage
+            localStorage.setItem("token", data.token);
+
             localStorage.setItem("user", JSON.stringify(data.user))
 
             // Redirect to main app

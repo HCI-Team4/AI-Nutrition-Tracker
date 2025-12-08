@@ -8,8 +8,19 @@ import { Button } from "@/components/ui/button"
 
 export default function Home() {
   const router = useRouter()
-  // Mock user name since we're bypassing login
-  const userName = "Guest"
+
+
+  let userName = "Guest"
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+  try {
+    const user = JSON.parse(storedUser) as { name?: string }
+    userName = user.name || "Guest";
+  } catch (e) {
+    console.error("Failed to parse user from localStorage", e)
+  }
+  }
+
 
   const handleLogout = () => {
     localStorage.removeItem("user")

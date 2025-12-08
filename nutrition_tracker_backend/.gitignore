@@ -144,4 +144,5 @@ vite.config.ts.timestamp-*
 # data files
 data/*
 !data/.gitkeep
+nodemon.json
 

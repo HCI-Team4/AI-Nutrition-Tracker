@@ -1,4 +1,5 @@
 import { analyzeWithLangChain } from "./helpers/langchainClient.js";
+import { addNutritionEntry } from "./helpers/nutritionStorage.js";
 
 export const analyzeImage = async (req, res) => {
   try {
@@ -23,7 +24,11 @@ export const analyzeImage = async (req, res) => {
         fat: 12
     }
 
-      console.log(result);
+    console.log(req.userEmail);
+    const userName = req.userEmail; // TODO: replace with req.user or email later
+    addNutritionEntry(userName, result);
+
+      console.log("returned");
 
     // 4. send back result
     res.json({ success: true, result });
