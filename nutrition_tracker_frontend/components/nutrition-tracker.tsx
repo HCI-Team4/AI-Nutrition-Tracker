@@ -3,11 +3,12 @@
 import type React from "react"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { Camera, Upload, Sparkles, X, Loader2 } from "lucide-react"
+import { Camera, Upload, Sparkles, X, Loader2, Check } from "lucide-react"
+import { addMeal } from "@/types/meal"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
-const API_URL=process.env.NEXT_PUBLIC_API_URL;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type InputMode = "select" | "camera" | "preview" | "loading"
 
@@ -26,6 +27,7 @@ export default function NutritionTracker() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
   const [capturedImage, setCapturedImage] = useState<Blob | null>(null)
   const [cameraError, setCameraError] = useState<string | null>(null)
+  const [mealSaved, setMealSaved] = useState(false)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -247,31 +249,54 @@ export default function NutritionTracker() {
     }
   }, [])
 
-    // Analyze food (mock API call)
-    const analyzeFood = useCallback(async () => {
-        if (!capturedImage) return;
-        setIsAnalyzing(true);
-        try {
-            const formData = new FormData();
-            formData.append("image", capturedImage, "upload.png");
-            const response = await fetch(`${API_URL}/analyze`, {
-                method: "POST",
-                body: formData,// No need for headers 
-            });
-        const data = await response.json();
-        if (!response.ok) { throw new Error(data.error || "Failed to analyze");
-        }
-        // Assume backend returns something like:
-        // { success: true, result: { food, calories, ... } }
-        setAnalysisResult(data.result);
-        console.log("[API] Backend result:", data.result);
-        } catch (err) {
-            console.error("Analyze API error:", err);
-        } finally {
-            setIsAnalyzing(false);
-        }
-    }, [capturedImage]);
-// Reset to initial state
+  // Analyze food (mock API call)
+  const analyzeFood = useCallback(async () => {
+    if (!capturedImage) return;
+    setIsAnalyzing(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", capturedImage, "upload.png");
+      const response = await fetch(`${API_URL}/analyze`, {
+        method: "POST",
+        body: formData,// No need for headers 
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to analyze");
+      }
+      // Assume backend returns something like:
+      // { success: true, result: { food, calories, ... } }
+      setAnalysisResult(data.result);
+      console.log("[API] Backend result:", data.result);
+    } catch (err) {
+      console.error("Analyze API error:", err);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }, [capturedImage]);
+
+  // Save meal to local storage
+  const saveMeal = useCallback(() => {
+    if (!analysisResult || !imagePreview) return
+
+    addMeal({
+      food: analysisResult.food,
+      calories: analysisResult.calories,
+      protein: analysisResult.protein,
+      carbs: analysisResult.carbs,
+      fat: analysisResult.fat,
+      imageUrl: imagePreview
+    })
+
+    setMealSaved(true)
+
+    // Reset saved state after 2 seconds
+    setTimeout(() => {
+      setMealSaved(false)
+    }, 2000)
+  }, [analysisResult, imagePreview])
+
+  // Reset to initial state
   const reset = useCallback(() => {
     stopCamera()
     setMode("select")
@@ -280,6 +305,7 @@ export default function NutritionTracker() {
     setAnalysisResult(null)
     setIsAnalyzing(false)
     setCameraError(null)
+    setMealSaved(false)
 
     // Reset file input
     if (fileInputRef.current) {
@@ -454,6 +480,27 @@ export default function NutritionTracker() {
                         <>
                           <Sparkles className="w-5 h-5 mr-2" />
                           {"Analyze Food"}
+                        </>
+                      )}
+                    </Button>
+                  )}
+
+                  {analysisResult && (
+                    <Button
+                      size="lg"
+                      className={`rounded-xl ${mealSaved ? "bg-green-600 hover:bg-green-700" : ""}`}
+                      onClick={saveMeal}
+                      disabled={mealSaved}
+                    >
+                      {mealSaved ? (
+                        <>
+                          <Check className="w-5 h-5 mr-2" />
+                          Saved!
+                        </>
+                      ) : (
+                        <>
+                          <Check className="w-5 h-5 mr-2" />
+                          Save Meal
                         </>
                       )}
                     </Button>

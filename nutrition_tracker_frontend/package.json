@@ -61,6 +61,8 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@next/swc-linux-x64-gnu": "^16.0.7",
+    "@next/swc-linux-x64-musl": "^16.0.7",
     "@tailwindcss/postcss": "^4.1.9",
     "@types/node": "^22",
     "@types/react": "^19",
