@@ -1,16 +1,8 @@
 [
   {
-    "email": "test@gmial.com",
-    "hashedPassword": "$2b$10$U77n2NKJgFID885dOkwqSu27CEBLhd/PUVLj8628DvW43dm9n4YRG",
-    "name": "test",
-    "age": 20,
-    "weight": 70,
-    "height": 180
-  },
-  {
-    "email": "test1@gmail.com",
-    "hashedPassword": "$2b$10$87QQHZP7l.RFFaT9sVGjneGtzNKxvCCmxbS.qw6Qn37zZIOBo6sBu",
-    "name": "test1",
+    "email": "test2@gmail.com",
+    "hashedPassword": "$2b$10$wA55ReixbGDYHJilgYPDpOhwW4mzGNcabfGYohWKKiT.rnZ0pDQ8y",
+    "name": "test2",
     "age": 20,
     "weight": 70,
     "height": 180

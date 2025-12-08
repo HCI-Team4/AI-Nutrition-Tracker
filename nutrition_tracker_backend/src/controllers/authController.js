@@ -2,16 +2,31 @@ import fs from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
 
+const dataDir = path.join(process.cwd(), "data");
 const usersFile = path.join(process.cwd(), "data", "users.json");
+
+function ensureStorage() {
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir);
+    console.log("[INIT] Created /data folder");
+  }
+
+  if (!fs.existsSync(usersFile)) {
+    fs.writeFileSync(usersFile, "[]");
+    console.log("[INIT] Created empty users.json");
+  }
+}
 
 // Load all users
 function loadUsers() {
+  ensureStorage();
   if (!fs.existsSync(usersFile)) return [];
   const data = fs.readFileSync(usersFile, "utf8");
   return JSON.parse(data || "[]");
 }
 
 function saveUsers(data) {
+  ensureStorage();
   fs.writeFileSync(usersFile, JSON.stringify(data, null, 2));
 }
 
