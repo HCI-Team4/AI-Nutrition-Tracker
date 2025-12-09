@@ -13,7 +13,7 @@ app.use(cors({
     credentials: true,
 }));
 
-app.use(express.json());
+app.use(express.json({limit: "30mb"}));
 
 // Routes
 app.use("/analyze", userRoutes);
