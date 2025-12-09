@@ -122,6 +122,13 @@ DASHSCOPE_API_KEY=your_dashscope_api_key_here
 
 ```bash
 python main.py
+
+or
+
+hos ton local host with
+
+uvicorn agent_server:app --host 0.0.0.0 --port 8000 --reload
+
 ```
 
 **Main Menu**:
