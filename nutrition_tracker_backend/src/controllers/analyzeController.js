@@ -1,7 +1,9 @@
 import axios from "axios";
 import fs from "fs";
 import FormData from "form-data";
+import path from "path";
 import { addNutritionEntry } from "./helpers/nutritionStorage.js";
+import { v4 as uuidv4 } from "uuid";
 
 export const analyzeImage = async (req, res) => {
   try {
@@ -11,6 +13,22 @@ export const analyzeImage = async (req, res) => {
       return res.status(400).json({ error: "Image file is required" });
     }
 
+    //const imageId = uuidv4();
+    //const ext = path.extname(req.file.originalname); // preserve file extension
+    //const imageName = `${imageId}${ext}`;
+    //const imageDir = path.join(process.cwd(), "uploads");
+
+    // Make sure upload directory exists
+    //if (!fs.existsSync(imageDir)) {
+   //   fs.mkdirSync(imageDir, { recursive: true });
+   // }
+
+    // Write the file to disk
+    //const imagePath = path.join(imageDir, imageName);
+    //fs.writeFileSync(imagePath, req.file.buffer);
+
+    //console.log("Image saved to:", imagePath);
+    //const base64Image = req.file.buffer.toString("base64");
 
     // 2. process buffer → base64
     //const base64Image = imageBuffer.toString("base64");
@@ -31,11 +49,17 @@ export const analyzeImage = async (req, res) => {
         carbs: 70,
         fat: 12
     }
+    const dishesWithImage = dishes.map(dish => ({
+      ...dish,
+       // image: base64Image
+      //imageId,            // store ID for reference
+      //imagePath: `/uploads/${imageName}` // optional path to serve from frontend
+    }));
 
       console.log(dishes);
 // Parse the nested JSON string
     const userName = req.userEmail; // TODO: replace with req.user or email later
-for (const dish of dishes) {
+for (const dish of dishesWithImage) {
   try {
       console.log("write start");
     addNutritionEntry(userName, dish);

@@ -5,7 +5,7 @@ import path from "path";
 const router = express.Router();
 
 // Suppose you have your JSON stored in a file
-const DATA_FILE = path.join(process.cwd(), "data", "meals.json");
+const DATA_FILE = path.join(process.cwd(), "data", "nutritionData.json");
 
 // GET /api/meals/:userId/:date
 router.get("/:userId/:date", (req, res) => {
@@ -19,7 +19,7 @@ router.get("/:userId/:date", (req, res) => {
     }
 
     const mealsByTime = allData[userId][date];
-
+    console.log(mealsByTime);
     // Flatten all dishes into one array, keep timestamp
     const formattedDishes = [];
     Object.entries(mealsByTime).forEach(([time, dishes]) => {

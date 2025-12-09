@@ -28,6 +28,7 @@ import {
 } from "@/types/meal"
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DailySummary() {
     const router = useRouter()
@@ -50,11 +51,23 @@ export default function DailySummary() {
         // Load summary for selected date
         const dailySummary = getDailySummary(selectedDate)
         setSummary(dailySummary)
-    }, [selectedDate])
+    }, [selectedDate]);
+    useEffect(() => {
+            loadDemoData();
+    },[]);
 
-    const loadDemoData = () => {
-        const today = formatDate(new Date())
-        const demoMeals: MealEntry[] = [
+    const loadDemoData = async () => {
+        //const today = formatDate(new Date())
+        const userString = localStorage.getItem("user");
+
+        if (userString) {
+            const user = JSON.parse(userString).email; // Convert JSON string back to object
+        const today = new Date();
+        const date = today.toISOString().split('T')[0];
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/meals/${user}/${date}`)
+        const data = await response.json()
+
+        const demoMeals: MealEntry[] = data ? data.meals : [
             {
                 id: "demo_1",
                 food: "Oatmeal with Berries",
@@ -89,16 +102,15 @@ export default function DailySummary() {
                 date: today
             }
         ]
-
         localStorage.setItem('meals', JSON.stringify(demoMeals))
-        window.location.reload()
+        } 
     }
 
     if (!summary) return null
 
     // Prepare data for charts
     const macroData = [
-        { name: 'Protein', value: summary.totalProtein },
+        { name: 'Protein', value: summary.totalProtein},
         { name: 'Carbs', value: summary.totalCarbs },
         { name: 'Fat', value: summary.totalFat },
     ].filter(item => item.value > 0);
@@ -157,7 +169,7 @@ export default function DailySummary() {
                             <Utensils className="h-4 w-4 text-blue-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{summary.totalProtein}g</div>
+                            <div className="text-2xl font-bold">{parseFloat(summary.totalProtein.toFixed(2))}g</div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -166,7 +178,7 @@ export default function DailySummary() {
                             <Wheat className="h-4 w-4 text-yellow-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{summary.totalCarbs}g</div>
+                            <div className="text-2xl font-bold">{parseFloat(summary.totalCarbs.toFixed(2))}g</div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -175,7 +187,7 @@ export default function DailySummary() {
                             <Droplet className="h-4 w-4 text-red-500" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold">{summary.totalFat}g</div>
+                            <div className="text-2xl font-bold">{parseFloat(summary.totalFat.toFixed(2))}g</div>
                         </CardContent>
                     </Card>
                 </div>
@@ -258,11 +270,11 @@ export default function DailySummary() {
                                 <Card key={meal.id} className="overflow-hidden">
                                     <div className="flex items-center gap-4 p-4">
                                         <div className="h-16 w-16 rounded-lg overflow-hidden bg-muted shrink-0">
-                                            <img
-                                                src={meal.imageUrl}
+                                        {/*<img
+                                                src={meal.image}
                                                 alt={meal.food}
                                                 className="h-full w-full object-cover"
-                                            />
+                                            /> */}
                                         </div>
                                         <div className="flex-1 min-w-0">
                                             <div className="flex items-center justify-between mb-1">

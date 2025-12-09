@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import userRoutes from "./src/routes/analyze.js";
 import authRoutes from "./src/routes/auth.js";
-//import mealsRoute from "./src/routes/meals.js";
+import mealsRoute from "./src/routes/meals.js";
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(express.json());
 // Routes
 app.use("/analyze", userRoutes);
 app.use("/auth", authRoutes);
-//app.use("/meals", mealsRoute);
+app.use("/meals", mealsRoute);
 
 const PORT = 4000;
 app.listen(PORT, () => {
