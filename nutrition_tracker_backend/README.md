@@ -1,4 +1,4 @@
-*** START***
+## START
 Create a `.env` file with a JWT secret
 ```.env
 JWT_SECRET='Your secret here'
