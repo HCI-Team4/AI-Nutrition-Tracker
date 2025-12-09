@@ -1,18 +1,34 @@
 [
   {
-    "name": "Cashew Stir-Fry with Vegetables",
-    "category": "Vegetable",
-    "estimated_weight_g": 250,
-    "portion_level": "medium",
-    "reason": "The stir-fry appears to be a balanced portion, filling about half the plate. The visible ingredients include bell peppers, snap peas, and cashews, suggesting a vegetable-heavy dish.",
+    "name": "Masala Dosa",
+    "category": "Staple",
+    "estimated_weight_g": 200,
+    "portion_level": "large",
+    "reason": "The dosa is a large, rolled crepe that appears to be the main component of the meal, occupying a significant portion of the plate.",
     "dish_id": "dish_1"
   },
   {
-    "name": "Steamed White Rice",
-    "category": "Staple",
-    "estimated_weight_g": 150,
+    "name": "Potato Masala",
+    "category": "Vegetable",
+    "estimated_weight_g": 100,
     "portion_level": "medium",
-    "reason": "The rice occupies approximately one-third of the plate, which is a typical serving size for a side dish accompanying a main course.",
+    "reason": "The potato masala is served in a small metal bowl and appears to be a side dish accompanying the dosa.",
     "dish_id": "dish_2"
+  },
+  {
+    "name": "Coconut Chutney",
+    "category": "Snack",
+    "estimated_weight_g": 50,
+    "portion_level": "small",
+    "reason": "The chutney is in a small white bowl and is typically served as a condiment in smaller quantities.",
+    "dish_id": "dish_3"
+  },
+  {
+    "name": "Red Chutney",
+    "category": "Snack",
+    "estimated_weight_g": 30,
+    "portion_level": "small",
+    "reason": "The red chutney is also in a small white bowl and is served in a quantity consistent with other condiments.",
+    "dish_id": "dish_4"
   }
 ]
